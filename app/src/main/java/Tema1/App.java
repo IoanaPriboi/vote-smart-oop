@@ -45,8 +45,21 @@ public class App {
         }
         System.out.println();
 
-        ArrayList<Alegeri> alegeri = new ArrayList<Alegeri>();
+        ManagerAlegeri managerAlegeri = new ManagerAlegeri();
+
+        // Lista cu toate circumscriptiile
         ArrayList<Circumscriptie> circumscriptii = new ArrayList<Circumscriptie>();
+
+        // Declar variabilele pe care le voi folosi pentru citire
+        String id;
+        String nume;
+        String regiune;
+        String CNP;
+        String cnpVotant, cnpCandidat;
+        String numeCircumscriptie;
+        String neindemanatic;
+        int varsta;
+        Alegeri alegere;
 
         // Input-ul user-ului:
         while (true) {
@@ -60,113 +73,129 @@ public class App {
             switch (comanda) {
                 case 0:
                     System.out.println("Introduceti id-ul si numele alegerilor:");
-                    String id0 = scanner.next();
-                    String nume = scanner.nextLine().trim();
-                    Alegeri alegere = new Alegeri(id0, nume);
-                    alegere.creeazaAlegere(alegeri);
+                    id = scanner.next();
+                    nume = scanner.nextLine().trim();
+                    managerAlegeri.creeazaAlegeri(id, nume);
                     break;
                     
                 case 1:
                     System.out.println("Introduceti id-ul alegerilor:");
-                    String id1 = scanner.nextLine();
-                    boolean existaId = false;
-                    for(Alegeri a: alegeri) {
-                        if(a.getId().equals(id1)) {
-                            if(a.getStatus().equals("NEINCEPUT")) {
-                                a.setStatus("IN_CURS");
-                                existaId = true;
-                                System.out.println("Au pornit alegerile " + a.getNume());
-                            } else {
-                                existaId = true;
-                                System.out.println("EROARE: Alegerile deja au inceput");
-                            }
-                        }
-                    }
-                    if(!existaId) {
-                        System.out.println("EROARE: Nu exista alegeri cu acest id");
-                    }
+                    id = scanner.nextLine();
+                    managerAlegeri.pornesteAlegeri(id);
                     break;
 
                 case 2:
                     System.out.println("Introduceti id-ul alegerilor, numele circumscriptiei si regiunea:");
-                    String id2 = scanner.next();
-                    String nume2 = scanner.next().trim();
-                    String regiune = scanner.nextLine().trim();
-                    Circumscriptie circumscriptie = new Circumscriptie(nume2, regiune);
-                    boolean ok = true;
-                    for(Circumscriptie c: circumscriptii) {
-                        if(c.getNume().equals(nume2)) {
-                            ok = false;
-                            System.out.println("EROARE: Exista deja o circumscriptie cu numele " + nume2);
-                        }
-                    }
-                    if(!ok) {
-                        break;
-                    }
-                    for(Alegeri a: alegeri) {
-                        if(a.getId().equals(id2)) {
-                            if(a.getStatus() != "IN_CURS") {
-                                ok = true;
-                                System.out.println("EROARE: Nu este perioada de votare");
-                            } else {
-                                circumscriptie.adaugaAlegeri(a);
-                                circumscriptii.add(circumscriptie);
-                                ok = true;
-                                System.out.println("S-a adaugat circumscriptia " + nume2);
-                            }
-                        }
-                    }
-                    if(ok) {
-                        System.out.println("EROARE: Nu exista alegeri cu acest id");
-                    }
+                    id = scanner.next();
+                    nume = scanner.next().trim();
+                    regiune = scanner.nextLine().trim();
+                    managerAlegeri.adaugaCircumscriptie(id, nume, regiune);
                     break;
+
                 case 3:
                     System.out.println("Introduceti id-ul alegerilor si numele circumscriptiei:");
+                    id = scanner.next();
+                    nume = scanner.nextLine().trim();
+                    managerAlegeri.eliminaCircumscriptie(id, nume);
                     break;
+
                 case 4:
                     System.out.println("Introduceti id-ul alegerilor, CNP-ul, varsta si numele candidatului:");
+                    id = scanner.next();
+                    CNP = scanner.next().trim();
+                    varsta = scanner.nextInt();
+                    nume = scanner.nextLine().trim();
+                    managerAlegeri.adaugaCandidat(id, CNP, varsta, nume);
                     break;
+
                 case 5:
                     System.out.println("Introduceti id-ul alegerilor si CNP-ul candidatului:");
+                    id = scanner.next();
+                    CNP = scanner.nextLine().trim();
+                    managerAlegeri.eliminaCandidat(id, CNP);
                     break;
+
                 case 6:
                     System.out.println("Introduceti id-ul alegerilor, numele circumscriptiei, CNP-ul, varsta, neindemanarea (da/nu) si numele votantului:");
+                    id = scanner.next();
+                    numeCircumscriptie = scanner.next().trim();
+                    CNP = scanner.next().trim();
+                    varsta = scanner.nextInt();
+                    neindemanatic = scanner.next().trim();
+                    nume = scanner.nextLine().trim();
+                    managerAlegeri.adaugaVotant(id, numeCircumscriptie, CNP, varsta, neindemanatic, nume);
                     break;
+
                 case 7:
                     System.out.println("Introduceti id-ul alegerilor:");
+                    id = scanner.nextLine().trim();
+                    managerAlegeri.listareCandidati(id);
                     break;
+
                 case 8:
                     System.out.println("Introduceti id-ul alegerilor, numele circumscriptiei:");
+                    id = scanner.next().trim();
+                    numeCircumscriptie = scanner.next().trim();
+                    managerAlegeri.listareVotanti(id, numeCircumscriptie);
                     break;
+
                 case 9:
                     System.out.println("Indroduceti id-ul alegerilor, numele circumscriptiei, CNP-ul votantului si CNP-ul candidatului:");
+                    id = scanner.next();
+                    numeCircumscriptie = scanner.next().trim();
+                    cnpVotant = scanner.next().trim();
+                    cnpCandidat = scanner.nextLine().trim();
+                    managerAlegeri.votare(id, numeCircumscriptie, cnpVotant, cnpCandidat);
                     break;
+
                 case 10:
                     System.out.println("Introduceti id-ul alegerilor:");
+                    id = scanner.nextLine().trim();
+                    managerAlegeri.oprireAlegeri(id);
                     break;
+
                 case 11:
                     System.out.println("Introduceti id-ul alegerilor si numele circumscriptiei:");
+                    id = scanner.next().trim();
+                    numeCircumscriptie = scanner.nextLine().trim();
+                    managerAlegeri.raportCircumscriptie(id, numeCircumscriptie);
                     break;
                 case 12:
                     System.out.println("Introduceti id-ul alegerilor:");
+                    id = scanner.nextLine().trim();
+                    managerAlegeri.raportNational(id);
                     break;
+
                 case 13:
                     System.out.println("Introduceti id-ul alegerilor si numele circumscriptiei:");
+                    id = scanner.next().trim();
+                    numeCircumscriptie = scanner.nextLine().trim();
+                    managerAlegeri.analizaDetaliataCircumscriptie(id, numeCircumscriptie);
                     break;
+
                 case 14:
                     System.out.println("Introduceti id-ul alegerilor:");
+                    id = scanner.nextLine().trim();
+                    managerAlegeri.analizaDetaliataNational(id);
                     break;
+
                 case 15:
                     System.out.println("Introduceti id-ul alegerilor:");
+                    id = scanner.nextLine().trim();
+                    managerAlegeri.rapoarteFraude(id);
                     break;
+
                 case 16:
                     System.out.println("Introduceti id-ul alegerilor:");
+                    id = scanner.nextLine().trim();
+                    managerAlegeri.stergeAlegeri(id);
                     break;
                 case 17:
+                    managerAlegeri.listareAlegeri();
                     break;
+
                 case 18:
                     System.out.println("Programul s-a incheiat. O zi buna!");
-                    alegeri.clear();
                     scanner.close();
                     return;
                 default:

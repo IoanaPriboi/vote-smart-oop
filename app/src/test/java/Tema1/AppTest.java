@@ -764,7 +764,7 @@ public class AppTest {
         App app = new App(in);
         app.run();
         String output = outputStreamCaptor.toString().trim();
-        String expected = "FRAUDa: Votantul cu CNP-ul 1234567891234 a incercat sa comita o frauda. Votul a fost anulat";
+        String expected = "FRAUDA: Votantul cu CNP-ul 1234567891234 a incercat sa comita o frauda. Votul a fost anulat";
         if (output.contains(expected)) {
             assertTrue(true);
         } else {
@@ -802,7 +802,7 @@ public class AppTest {
         App app = new App(in);
         app.run();
         String output = outputStreamCaptor.toString().trim();
-        String expected = "FRAUDa: Votantul cu CNP-ul 1234567891234 a incercat sa comita o frauda. Votul a fost anulat";
+        String expected = "FRAUDA: Votantul cu CNP-ul 1234567891234 a incercat sa comita o frauda. Votul a fost anulat";
         if (output.contains(expected)) {
             assertTrue(true);
         } else {
@@ -1484,7 +1484,7 @@ public class AppTest {
         App app = new App(in);
         app.run();
         String output = outputStreamCaptor.toString().trim();
-        String expected = "in Bucuresti au fost 2 voturi din 7. Adica 28%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 50% din voturile circumscriptiei.";
+        String expected = "In Bucuresti au fost 2 voturi din 7. Adica 28%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 50% din voturile circumscriptiei.";
         if (output.contains(expected)) {
             assertTrue(true);
         } else {
@@ -1623,9 +1623,9 @@ public class AppTest {
         App app = new App(in);
         app.run();
         String output = outputStreamCaptor.toString().trim();
-        String expected = "in Romania au fost 7 voturi.";
-        String expected2 = "in Muntenia2 au fost 3 voturi din 7. Adica 42%. Cele mai multe voturi au fost stranse de 1234567891238 Dumitru Florin Ionescu. Acestea constituie 66% din voturile regiunii.";
-        String expected3 = "in Muntenia au fost 4 voturi din 7. Adica 57%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 50% din voturile regiunii.";
+        String expected = "In Romania au fost 7 voturi.";
+        String expected2 = "In Muntenia2 au fost 3 voturi din 7. Adica 42%. Cele mai multe voturi au fost stranse de 1234567891238 Dumitru Florin Ionescu. Acestea constituie 66% din voturile regiunii.";
+        String expected3 = "In Muntenia au fost 4 voturi din 7. Adica 57%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 50% din voturile regiunii.";
         if (output.contains(expected) && output.contains(expected2) && output.contains(expected3)) {
             assertTrue(true);
         } else {
@@ -1819,7 +1819,7 @@ public class AppTest {
         app.run();
         String output = outputStreamCaptor.toString().trim();
         String expected = "Fraude comise:";
-        String expected2 = "in Bucuresti: 1234567891234 Chipescu Ciprian";
+        String expected2 = "In Bucuresti: 1234567891234 Chipescu Ciprian";
         if (output.contains(expected) && output.contains(expected2)) {
             assertTrue(true);
         } else {
