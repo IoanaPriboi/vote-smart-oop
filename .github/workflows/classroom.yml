@@ -442,7 +442,7 @@ jobs:
       with:
         test-name: Test 47
         setup-command: ''
-        command: gradle test
+        command: gradle test --tests AppTest.test47
         timeout: 10
         max-score: 1
     - name: Test 48
