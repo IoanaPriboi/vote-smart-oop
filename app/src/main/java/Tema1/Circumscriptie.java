@@ -166,17 +166,16 @@ public class Circumscriptie {
     }
 
     /* Returneaza o lista cu canidatii votati in aceasta circumscriptie,
-     * fiecare cadidat avand doar numarul de voturi din aceasta circumscriptie
-     * Sortarea este descrescatoare dupa voturi, apoi descrescatoare dupa CNP */
+     * fiecare cadidat avand doar numarul de voturi din aceasta circumscriptie */
     public ArrayList<Candidat> getCandidatiVotati() {
-        AnalizaCandidati analiza = new AnalizaCandidati();
-        return analiza.getCandidatiVotati(voturi);
+        ManagerCandidati managerCandidati = new ManagerCandidati();
+        return managerCandidati.getCandidatiVotati(voturi);
     }
 
     // Returneaza cel mai votat candidat din circumscriptie
     public Candidat celMaiVotatCandidat() {
-        AnalizaCandidati analiza = new AnalizaCandidati();
-        return analiza.getCelMaiVotatCandidat(getCandidatiVotati());
+        ManagerCandidati managerCandidati = new ManagerCandidati(getCandidatiVotati());
+        return managerCandidati.getCelMaiVotatCandidat();
     }
 
     // Afiseaza raportul de voturi pentru circumscriptie
