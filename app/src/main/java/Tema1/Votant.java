@@ -54,7 +54,7 @@ public class Votant extends Persoana {
 
     /* Verifica daca canditatul este valid, adica daca
      * are CNP valid si are varsta mai mare de 35 de ani */
-    public boolean eValid() {
+    public boolean esteValid() {
         return cnpValid() && varstaValida();
     }
 

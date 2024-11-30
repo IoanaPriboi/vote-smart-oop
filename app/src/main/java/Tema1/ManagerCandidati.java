@@ -106,7 +106,7 @@ public class ManagerCandidati {
     }
 
     // Returneaza cel mai votat candidat
-    public Candidat getCelMaiVotatCandidat() {
+    public Candidat celMaiVotatCandidat() {
         Candidat celMaiVotatCandidat = candidati.get(0);
         for (Candidat c : candidati) {
             if (c.getNumarVoturi() > celMaiVotatCandidat.getNumarVoturi()) {
@@ -117,7 +117,7 @@ public class ManagerCandidati {
     }
 
     // Returneaza candidatii votati, acestia avand numarul de voturi corespunzator
-    public ArrayList<Candidat> getCandidatiVotati(ArrayList<Vot> voturi) {
+    public ArrayList<Candidat> candidatiVotati(ArrayList<Vot> voturi) {
         ArrayList<Candidat> candidatiVotati = new ArrayList<>();
         for (Vot v : voturi) {
             // Verific daca candidatul exista deja in lista de candidati votati in circumscriptie

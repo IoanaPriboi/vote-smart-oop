@@ -9,6 +9,7 @@ import java.util.Collections;
 public class ManagerAlegeri {
     private ArrayList<Alegeri> listaAlegeri = new ArrayList<>();    // lista cu toate alegerile
     private Analiza analiza = new Analiza();
+    private Raport raport = new Raport();
 
     // Constructori
     public ManagerAlegeri() {
@@ -199,7 +200,7 @@ public class ManagerAlegeri {
         if (c == null) return;
 
         // Afisez raportul pentru circumscriptie
-        c.raportVoturi();
+        raport.raportCircumscriptie(c);
     }
 
     // Afiseaza raportul de voturi pe plan national
@@ -209,7 +210,7 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Afisez raportul de voturi pe plan national
-        a.raportNational();
+        raport.raportNational(a);
     }
 
     public void analizaDetaliataCircumscriptie(String id, String numeCircumscriptie) {
@@ -234,7 +235,6 @@ public class ManagerAlegeri {
         analiza.analizaDetaliataNational(a);
     }
 
-
     // Afiseaza toate fraudele din sesiunea de alegeri
     public void rapoarteFraude(String id) {
         // Verific daca exista alegerile cu id-ul dat
@@ -242,7 +242,7 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Afisez fraudele comise
-        a.rapoarteFraude();
+        raport.raportFraude(a);
     }
 
     // Sterge alegerile cu id-ul dat din lista de alegeri

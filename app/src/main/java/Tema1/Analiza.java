@@ -17,7 +17,7 @@ public class Analiza {
         }
 
         // Verific daca nu a votat niciun cetatean din circumscriptie
-        int numarVoturiNational = alegeri.getNumarVoturiNational();
+        int numarVoturiNational = alegeri.numarVoturiNational();
         int numarVoturiCircumscriptie = circumscriptie.getNumarVoturi();
         if (numarVoturiCircumscriptie == 0) {
             System.out.println("GOL: Lumea nu isi exercita dreptul de vot in " + circumscriptie.getNume());
@@ -44,7 +44,7 @@ public class Analiza {
         }
 
         // Verific daca nu a votat nimeni
-        int numarVoturiNational = alegeri.getNumarVoturiNational();
+        int numarVoturiNational = alegeri.numarVoturiNational();
         if (numarVoturiNational == 0) {
             System.out.println("GOL: Lumea nu isi exercita dreptul de vot in Romania");
             return;

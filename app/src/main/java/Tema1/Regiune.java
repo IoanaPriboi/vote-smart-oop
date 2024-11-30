@@ -39,22 +39,14 @@ public class Regiune implements Comparable<Regiune> {
 
     // Returneza candidatii votati in regiune cu numarul corespunzator de voturi
     public ArrayList<Candidat> getCandidatiVotati() {
-        AnalizaCandidati analiza = new AnalizaCandidati();
-        return analiza.getCandidatiVotati(getVoturi());
-    }
-
-    // Afiseaza candidatii votati din regiune
-    public void afisareCandidatiVotati() {
-        ArrayList<Candidat> candidatiVotati = getCandidatiVotati();
-        for (Candidat c : candidatiVotati) {
-            System.out.println(c + " " + c.getNumarVoturi());
-        }
+        ManagerCandidati managerCandidati = new ManagerCandidati();
+        return managerCandidati.candidatiVotati(getVoturi());
     }
 
     // Returneaza cel mai votat candidat din regiune
     public Candidat celMaiVotatCandidat() {
-        AnalizaCandidati analiza = new AnalizaCandidati();
-        return analiza.getCelMaiVotatCandidat(getCandidatiVotati());
+        ManagerCandidati managerCandidati = new ManagerCandidati(getCandidatiVotati());
+        return managerCandidati.celMaiVotatCandidat();
     }
 
     // Returneaza o lista cu toate voturile din regiune
