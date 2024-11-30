@@ -1,11 +1,6 @@
 package Tema1;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Circumscriptie {
     private String nume;
@@ -123,6 +118,51 @@ public class Circumscriptie {
     // Adauga un vot in lista de voturi
     public void adaugaVot(Vot vot) {
         voturi.add(vot);
+    }
+
+
+    // Verifica daca votantul a incercat sa comita o frauda
+    public boolean incercareFrauda(String cnpVotant, Alegeri alegeri) {
+        Votant votant = cautaVotant(cnpVotant);
+        if (votant == null || votant.aVotat()) {
+            // Adaug frauda in lista de fraude din alegeri si afisez eroarea
+            alegeri.adaugaFrauda(new Frauda(votant));
+            System.out.println("FRAUDA: Votantul cu CNP-ul " + cnpVotant +
+                    " a incercat sa comita o frauda. Votul a fost anulat");
+            return true;
+        }
+
+        // Votantul a fost cinstit
+        return false;
+    }
+
+    // Inregistrez votul votantului pentru candidat
+    public void inregistrareVot(Votant votant, Candidat candidat) {
+        votant.setVotat(true);
+        Vot vot = new Vot(votant, candidat);
+
+        // Verific daca votul este valid
+        if (vot.getValid()) {
+            candidat.adaugaVot();   // adaug votul candidatului
+            adaugaVot(vot);         // adaug votul in lista de voturi
+        }
+
+        // Afisez mesajul pentru succes
+        System.out.println(votant.getNume() + " a votat pentru " + candidat.getNume());
+    }
+
+    // Metoda prin care se voteaza in circumscriptie
+    public void votare(String cnpVotant, String cnpCandidat, Alegeri alegeri) {
+        // Verific daca exista candidatul
+        Candidat candidat = alegeri.cautaCandidat(cnpCandidat);
+        if (candidat == null) return;
+
+        // Verific daca votantul a incercat sa comita o frauda
+        if(incercareFrauda(cnpVotant, alegeri)) return;
+
+        // Votantul a fost cinstit, deci inregistrez votul
+        Votant votant = cautaVotant(cnpVotant);
+        inregistrareVot(votant, candidat);
     }
 
     /* Returneaza o lista cu canidatii votati in aceasta circumscriptie,

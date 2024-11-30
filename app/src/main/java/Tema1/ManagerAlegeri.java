@@ -110,10 +110,7 @@ public class ManagerAlegeri {
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
-        if (c == null) {
-            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
-        }
+        if (c == null) return;
 
         c.adaugaVotant(cnp, varsta, neindemanatic, numeVotant);
     }
@@ -140,10 +137,7 @@ public class ManagerAlegeri {
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
-        if (c == null) {
-            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
-        }
+        if (c == null) return;
 
         // Afisez votantii din circumscriptie
         c.listareVotanti();
@@ -155,7 +149,12 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
-        a.votare(numeCircumscriptie, cnpVotant, cnpCandidat);
+        // Verific daca exista circumscriptia
+        Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
+        if(c == null) return;
+
+        // Se realizeaza votarea
+        c.votare(cnpVotant, cnpCandidat, a);
     }
 
     // Opreste alegerile
@@ -197,10 +196,7 @@ public class ManagerAlegeri {
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
-        if (c == null) {
-            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
-        }
+        if (c == null) return;
 
         // Afisez raportul pentru circumscriptie
         c.raportVoturi();
@@ -223,10 +219,7 @@ public class ManagerAlegeri {
 
         // Verific daca exista circumscriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
-        if (c == null) {
-            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
-        }
+        if (c == null) return;
 
         // Afisez analiza detaliata pentru circumscriptia data
         analiza.analizaDetaliataPerCircumscriptie(a, c);

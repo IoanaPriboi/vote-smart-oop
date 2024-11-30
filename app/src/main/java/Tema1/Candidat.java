@@ -45,7 +45,7 @@ public class Candidat extends Persoana {
 
     /* Verifica daca canditatul este valid, adica daca
      * are si CNP-ul si varsta valide  */
-    public boolean eValid() {
+    public boolean esteValid() {
         return cnpValid() && varstaValida();
     }
 }

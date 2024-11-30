@@ -43,7 +43,7 @@ Contine scheletul temei, meniul cu comenzile posibile
 
 #### <ins> Metode:
 * Constructori cu parametrii si fara parametrii
-* Gettere si settere pentru fiecare atribut
+* Gettere si settere pentru toate atributele
 * 
 
 ### ManagerAlegeri

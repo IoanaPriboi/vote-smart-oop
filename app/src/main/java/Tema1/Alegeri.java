@@ -124,7 +124,8 @@ public class Alegeri {
             }
         }
 
-        // Nu am gasit circumscriptia
+        // Nu am gasit circumscriptia => eroare
+        System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
         return null;
     }
 
@@ -134,17 +135,15 @@ public class Alegeri {
         if (!estePerioadaDeVotare()) return;
 
         // Caut si verific daca exista deja o circumscriptie cu acelasi nume
-        Circumscriptie c = cautaCircumscriptie(numeCircumscriptie);
-
-        // Exista deja o circumscriptie cu acelasi nume => eroare
-        if (c != null) {
-            System.out.println("EROARE: Deja exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
+        for (Circumscriptie c : circumscriptii) {
+            if (c.getNume().equals(numeCircumscriptie)) {
+                System.out.println("EROARE: Deja exista o circumscriptie cu numele " + numeCircumscriptie);
+                return;
+            }
         }
 
         // Adaug circumscriptia in alegeri
-        c = new Circumscriptie(numeCircumscriptie, regiune);
-        circumscriptii.add(c);
+        circumscriptii.add(new Circumscriptie(numeCircumscriptie, regiune));
         System.out.println("S-a adaugat circumscriptia " + numeCircumscriptie);
     }
 
@@ -155,10 +154,7 @@ public class Alegeri {
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = cautaCircumscriptie(numeCircumscriptie);
-        if(c == null) {
-            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
-        }
+        if(c == null) return;
 
         // Sterg circumscriptia din sesiunea de alegeri
         circumscriptii.remove(c);
@@ -166,14 +162,16 @@ public class Alegeri {
     }
 
     // Cauta candidatul in lista de candidati dupa CNP si il returneaza
-    public Candidat cautaCandidati(String cnp) {
+    public Candidat cautaCandidat(String cnpCandidat) {
         // Caut candidatul in lista
         for (Candidat candidat : candidati) {
-            if (candidat.getCnp().equals(cnp)) {
+            if (candidat.getCnp().equals(cnpCandidat)) {
                 return candidat;   // am gasit candidatul
             }
         }
-        return null;    // nu am gasit candidatul
+        // Candidatul nu a fost gasit => eroare
+        System.out.println("EROARE: Nu exista un candidat cu CNP-ul " + cnpCandidat);
+        return null;
     }
 
     // Adauga un candidat in alegeri
@@ -182,20 +180,21 @@ public class Alegeri {
         if (!estePerioadaDeVotare()) return;
 
         // Verific daca mai exista in alegeri un candidat cu acelasi CNP
-        Candidat candiat = cautaCandidati(cnp);
-
         // Am gasit un candidat cu acelasi CNP => eroare
-        if (candiat != null) {
-            System.out.println("EROARE: Candidatul " + candiat.getNume() + " are deja acelasi CNP");
-            return;
+        for (Candidat c : candidati) {
+            // Am gasit un candidat cu acelasi CNP => eroare
+            if (c.getCnp().equals(cnp)) {
+                System.out.println("EROARE: Candidatul " + c.getNume() + " are deja acelasi CNP");
+                return;
+            }
         }
 
         // Nu am gasit un candiat cu acelasi CNP => creez un nou candidat
-        candiat = new Candidat(cnp, varsta, nume);
+        Candidat candidat = new Candidat(cnp, varsta, nume);
 
         // Verific daca candidatul este valid si il adaug in alegeri
-        if (candiat.eValid()) {
-            candidati.add(candiat);
+        if (candidat.esteValid()) {
+            candidati.add(candidat);
             System.out.println("S-a adaugat candidatul " + nume);
         }
     }
@@ -206,7 +205,7 @@ public class Alegeri {
         if (!estePerioadaDeVotare()) return;
 
         // Verific daca exista candidatul in lista
-        Candidat c = cautaCandidati(cnp);
+        Candidat c = cautaCandidat(cnp);
 
         // Nu am gasit candidatul => erorare
         if (c == null) {
@@ -244,7 +243,7 @@ public class Alegeri {
             System.out.println("EROARE: Inca nu au inceput alegerile");
             return;
         }
-        
+
         // Verific daca exista candidati
         if (candidati.isEmpty()) {
             System.out.println("GOL: Nu sunt candidati");
@@ -257,47 +256,44 @@ public class Alegeri {
         afisareCandidati();
     }
 
-    // Inregistreaza un vot
-    public void votare(String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
-
-        // Verific daca exista circumscriptia in alegeri
-        Circumscriptie circumscriptie = cautaCircumscriptie(numeCircumscriptie);
-        if (circumscriptie == null) {
-            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
-            return;
-        }
-
-        // Verific daca exista candidatul
-        Candidat candidat = cautaCandidati(cnpCandidat);
-        if (candidat == null) {
-            System.out.println("EROARE: Nu exista un candidat cu CNP-ul " + cnpCandidat);
-            return;
-        }
-
-        // Verific daca votantul a incercat sa comita o frauda
-        Votant votant = circumscriptie.cautaVotant(cnpVotant);
-        if (votant == null || votant.aVotat()) {
-            // Adaug frauda in lista de fraude si afisez eroarea
-            fraude.add(new Frauda(votant, circumscriptie));
-            System.out.println("FRAUDA: Votantul cu CNP-ul " + cnpVotant +
-                    " a incercat sa comita o frauda. Votul a fost anulat");
-            return;
-        }
-
-        // Votantul nu a inecrcat sa comita nicio frauda, deci inregistrez votul
-        votant.setVotat(true);
-        Vot vot = new Vot(votant, candidat);
-
-        // Verific daca votul este valid
-        if (vot.getValid()) {
-            candidat.adaugaVot();           // adaug votul candidatului
-            circumscriptie.adaugaVot(vot);  // adaug votul in lista din circumscriptie
-        }
-
-        System.out.println(votant.getNume() + " a votat pentru " + candidat.getNume());
-    }
+//    // Inregistreaza un vot
+//    public void votare(String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
+//        // Verific daca este perioada de votare
+//        if (!estePerioadaDeVotare()) return;
+//
+//        // Verific daca exista circumscriptia in alegeri
+//        Circumscriptie circumscriptie = cautaCircumscriptie(numeCircumscriptie);
+//        if (circumscriptie == null) return;
+//
+//        // Verific daca exista candidatul
+//        Candidat candidat = cautaCandidat(cnpCandidat);
+//        if (candidat == null) {
+//            System.out.println("EROARE: Nu exista un candidat cu CNP-ul " + cnpCandidat);
+//            return;
+//        }
+//
+//        // Verific daca votantul a incercat sa comita o frauda
+//        Votant votant = circumscriptie.cautaVotant(cnpVotant);
+//        if (votant == null || votant.aVotat()) {
+//            // Adaug frauda in lista de fraude si afisez eroarea
+//            fraude.add(new Frauda(votant, circumscriptie));
+//            System.out.println("FRAUDA: Votantul cu CNP-ul " + cnpVotant +
+//                    " a incercat sa comita o frauda. Votul a fost anulat");
+//            return;
+//        }
+//
+//        // Votantul nu a inecrcat sa comita nicio frauda, deci inregistrez votul
+//        votant.setVotat(true);
+//        Vot vot = new Vot(votant, candidat);
+//
+//        // Verific daca votul este valid
+//        if (vot.getValid()) {
+//            candidat.adaugaVot();           // adaug votul candidatului
+//            circumscriptie.adaugaVot(vot);  // adaug votul in lista din circumscriptie
+//        }
+//
+//        System.out.println(votant.getNume() + " a votat pentru " + candidat.getNume());
+//    }
 
     // Opreste alegerile
     public void oprireAlegeri() {
@@ -334,7 +330,7 @@ public class Alegeri {
             System.out.println("EROARE: Inca nu s-a terminat votarea");
             return;
         }
-        
+
         // Verific daca lumea isi exercita dreptul de vot
         ArrayList<Vot> voturiNationale = getVoturiNational();
         if (voturiNationale.isEmpty()) {
@@ -350,6 +346,11 @@ public class Alegeri {
         for (Candidat c : candidati) {
             System.out.println(c.getNume() + " " + c.getCnp() + " - " + c.getNumarVoturi());
         }
+    }
+
+    // Adauga fraduda in alegeri
+    public void adaugaFrauda(Frauda frauda) {
+        fraude.add(frauda);
     }
 
     // Afiseaza toate fraudele din sesiunea de alegeri

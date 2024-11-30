@@ -41,5 +41,4 @@ public class AnalizaCandidati {
         }
         return celMaiVotatCandidat;
     }
-
 }
