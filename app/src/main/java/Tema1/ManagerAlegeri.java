@@ -3,12 +3,17 @@ package Tema1;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+// Gestioneaza si salveaza toate alegerile din program
 public class ManagerAlegeri {
-    private ArrayList<Alegeri> listaAlegeri = new ArrayList<Alegeri>();
+    private ArrayList<Alegeri> listaAlegeri = new ArrayList<>();    // lista cu toate alegerile
+    private Analiza analiza = new Analiza();
 
     // Constructori
-    public ManagerAlegeri() {}
+    public ManagerAlegeri() {
+    }
+
     public ManagerAlegeri(ArrayList<Alegeri> listaAlegeri) {
         this.listaAlegeri = listaAlegeri;
     }
@@ -17,286 +22,243 @@ public class ManagerAlegeri {
     public ArrayList<Alegeri> getListaAlegeri() {
         return listaAlegeri;
     }
+
     public void setListaAlegeri(ArrayList<Alegeri> listaAlegeri) {
         this.listaAlegeri = listaAlegeri;
     }
 
-    // Cauta alegerile cu id-ul dat ca parametru
+    // Cauta si returneaza alegerile cu id-ul dat ca parametru
     public Alegeri cautaAlegeri(String id) {
-        for(Alegeri a : listaAlegeri) {
-            if(a.getId().equals(id)) {
-                return a;
+        for (Alegeri a : listaAlegeri) {
+            if (a.getId().equals(id)) {
+                return a;   // alegerile au fost gasite
             }
         }
 
         // Alegerile nu au fost gasite in lista
+        System.out.println("EROARE: Nu exista alegeri cu acest id");
         return null;
-    }
-
-    // Adauga alegerile in lista de alegeri
-    public void adaugaAlegeri(Alegeri alegeri) {
-        listaAlegeri.add(alegeri);
     }
 
     // Creeaza o sesiune de alegeri
     public void creeazaAlegeri(String id, String nume) {
-        Alegeri a = cautaAlegeri(id);
-        if(a != null) {
-            System.out.println("EROARE: Deja exista alegeri cu id " + id);
-            return;
+        // Caut si verific daca exista deja alegeri cu acelasi id
+        for (Alegeri a : listaAlegeri) {
+            if (a.getId().equals(id)) {
+                System.out.println("EROARE: Deja exista alegeri cu id " + id);
+                return;
+            }
         }
-        a = new Alegeri(id, nume, "NEINCEPUT");
-        adaugaAlegeri(a);
+
+        // Nu am gasit alegerile => creez o sesiune noua de alegeri si o adaug in lista
+        listaAlegeri.add(new Alegeri(id, nume, "NEINCEPUT"));
         System.out.println("S-au creat alegerile " + nume);
     }
 
     // Porneste alegerile
     public void pornesteAlegeri(String id) {
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
-
-        if(a.getStatus().equals("NEINCEPUT")) {
-            a.setStatus("IN_CURS");
-            System.out.println("Au pornit alegerile " + a.getNume());
-        } else {
-            System.out.println("EROARE: Alegerile deja au inceput");
-        }
+        // Pornesc alegerile
+        a.pornesteAlegeri();
     }
 
+    // Adauga circumscriptia in alegeri
     public void adaugaCircumscriptie(String id, String nume, String regiune) {
         Alegeri a = cautaAlegeri(id);
-
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
+        if (a == null) return;
 
         a.adaugaCircumscriptie(nume, regiune);
     }
 
+    // Elimina circumscriptia din alegeri
     public void eliminaCircumscriptie(String id, String nume) {
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
         a.eliminaCircumscriptie(nume);
     }
 
-    public void adaugaCandidat(String id, String CNP, int varsta, String nume) {
+    // Adauga candidat in alegeri
+    public void adaugaCandidat(String id, String cnp, int varsta, String nume) {
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
-        a.adaugaCandidat(CNP, varsta, nume);
+        a.adaugaCandidat(cnp, varsta, nume);
     }
 
-    public void eliminaCandidat(String id, String CNP) {
+    // Elimina candidat din alegeri
+    public void eliminaCandidat(String id, String cnp) {
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
-
-        a.eliminaCandidat(CNP);
+        a.eliminaCandidat(cnp);
     }
 
-    public void adaugaVotant(String id, String numeCircumscriptie, String CNP, int varsta, String neindemanatic, String nume) {
+    // Adauga votant in circumscriptie
+    public void adaugaVotant(String id, String numeCircumscriptie, String cnp, int varsta, String neindemanatic, String numeVotant) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
+        // Verific daca este perioada de votare
+        if (!a.getStagiu().equals("IN_CURS")) {
+            System.out.println("EROARE: Nu este perioada de votare");
             return;
         }
 
-        a.adaugaVotant(numeCircumscriptie, CNP, varsta, neindemanatic, nume);
+        // Verific daca exista circumsriptia in alegeri
+        Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
+        if (c == null) {
+            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
+            return;
+        }
+
+        c.adaugaVotant(cnp, varsta, neindemanatic, numeVotant);
     }
 
+    // Listeaza caditatii dintr-o sesiune de alegeri
     public void listareCandidati(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
-
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
+        if (a == null) return;
 
         a.listareCandidati();
     }
 
+    // Listeaza votantii dintr-o circumscriptie
     public void listareVotanti(String id, String numeCircumscriptie) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
+        // Verific daca au inceput alegerile
+        if (!(a.getStagiu().equals("IN_CURS") || a.getStagiu().equals("TERMINAT"))) {
             return;
         }
 
-        a.listareVotanti(numeCircumscriptie);
+        // Verific daca exista circumsriptia in alegeri
+        Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
+        if (c == null) {
+            System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
+            return;
+        }
+
+        // Afisez votantii din circumscriptie
+        c.listareVotanti();
     }
-    public void votare(String id, String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
-        Alegeri a = cautaAlegeri(id);
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
+    // Inregistreaza un vot
+    public void votare(String id, String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
+        // Verific daca exista alegerile cu id-ul dat
+        Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
         a.votare(numeCircumscriptie, cnpVotant, cnpCandidat);
     }
 
+    // Opreste alegerile
     public void oprireAlegeri(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
-
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
+        if (a == null) return;
 
         a.oprireAlegeri();
     }
 
+    // Listeaza toate alegerile
     public void listareAlegeri() {
-        if(listaAlegeri.isEmpty()) {
+        // Verific daca exista alegeri
+        if (listaAlegeri.isEmpty()) {
             System.out.println("GOL: Nu sunt alegeri");
             return;
         }
+
+        // Afisez alegerile (in ordinea in care au fost bagate in lista)
         System.out.println("Alegeri:");
-        for(Alegeri a : listaAlegeri) {
+        for (Alegeri a : listaAlegeri) {
             System.out.println(a);
         }
     }
 
+    // Afiseaza raportul voturilor pentru circumscriptia data
     public void raportCircumscriptie(String id, String numeCircumscriptie) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
+
+        // Verific daca s-au terminat alegerile
+        if (!a.getStagiu().equals("TERMINAT")) {
+            System.out.println("EROARE: Inca nu s-a terminat votarea");
             return;
         }
 
+        // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
-        if(c == null) {
+        if (c == null) {
             System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
             return;
         }
 
-        if(!a.getStatus().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
+        // Afisez raportul pentru circumscriptie
         c.raportVoturi();
     }
 
+    // Afiseaza raportul de voturi pe plan national
     public void raportNational(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
-        if(!a.getStatus().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
-
-        ArrayList<Vot> voturi = a.getVoturi();
-        if(voturi.isEmpty()) {
-            System.out.println("GOL: Lumea nu isi exercita dreptul de vot in Romania");
-            return;
-        }
-
-        ArrayList<Candidat> candidati = a.getCandidati();
-
-        // Sortare crescator dupa voturi, apoi descrescator dupa CNP
-        candidati.sort((c1, c2) -> {
-            if (c1.getNumarVoturi() != c2.getNumarVoturi()) {
-                return Integer.compare(c1.getNumarVoturi(), c2.getNumarVoturi());
-            }
-            return c2.getCNP().compareTo(c1.getCNP());
-        });
-
-        System.out.println("Raport voturi Romania:");
-        for(Candidat c : candidati) {
-            System.out.println(c.getNume() + " " + c.getCNP() + " - " + c.getNumarVoturi());
-        }
-        candidati.clear();
+        // Afisez raportul de voturi pe plan national
+        a.raportNational();
     }
 
     public void analizaDetaliataCircumscriptie(String id, String numeCircumscriptie) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
+        // Verific daca exista circumscriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
-        if(c == null) {
+        if (c == null) {
             System.out.println("EROARE: Nu exista o circumscriptie cu numele " + numeCircumscriptie);
             return;
         }
-        if(!a.getStatus().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
-        c.analizaDetaliata(a.getNumarVoturi());
+
+        // Afisez analiza detaliata pentru circumscriptia data
+        analiza.analizaDetaliataPerCircumscriptie(a, c);
     }
 
     public void analizaDetaliataNational(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
-
-        a.analizaDetaliataNational();
+        // Afisez analiza detaliata pe plan national
+        analiza.analizaDetaliataNational(a);
     }
 
+
+    // Afiseaza toate fraudele din sesiunea de alegeri
     public void rapoarteFraude(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
 
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
-
+        // Afisez fraudele comise
         a.rapoarteFraude();
     }
 
+    // Sterge alegerile cu id-ul dat din lista de alegeri
     public void stergeAlegeri(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
-
-        // Alegerile nu au fost gasite
-        if(a == null) {
-            System.out.println("EROARE: Nu exista alegeri cu acest id");
-            return;
-        }
+        if (a == null) return;
 
         listaAlegeri.remove(a);
         System.out.println("S-au sters alegerile " + a.getNume());
     }
-
 }

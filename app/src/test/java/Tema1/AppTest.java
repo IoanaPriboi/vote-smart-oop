@@ -1046,10 +1046,10 @@ public class AppTest {
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));
         String setup21 = "0\nA0 Alegeri Electorale 2025\n1\nA0\n2\nA0 Bucuresti Muntenia\n2\nA0 Bucuresti2 Muntenia\n";
-        String setup22 = "6\nA0 Bucuresti 1234567891234 20 da Chipescu Ciprian\n"
-                + "6\nA0 Bucuresti 1234567891235 20 da Chipescu Ciprian2\n"
-                + "6\nA0 Bucuresti2 1234567891236 20 da Chipescu Ciprian3\n"
-                + "6\nA0 Bucuresti2 1234567891237 20 da Chipescu Ciprian4\n";
+        String setup22 = "6\nA0 Bucuresti 1234567891234 20 nu Chipescu Ciprian\n"
+                + "6\nA0 Bucuresti 1234567891235 20 nu Chipescu Ciprian2\n"
+                + "6\nA0 Bucuresti2 1234567891236 20 nu Chipescu Ciprian3\n"
+                + "6\nA0 Bucuresti2 1234567891237 20 nu Chipescu Ciprian4\n";
         String setup23 = "4\nA0 1234567891238 45 Dumitru Florin Ionescu\n"
                 + "4\nA0 1234567891239 45 Dumitru Florin Ionescu2\n";
         String setup30 = setup21 + setup22 + setup23;
@@ -1058,9 +1058,9 @@ public class AppTest {
         String setup31 = "2\nA0 Bucuresti3 Muntenia2\n";
 
         // mai putem inca 3 votanti in Bucuresti3
-        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 da Chipescu Ciprian5\n"
-                + "6\nA0 Bucuresti3 1234567891239 20 da Chipescu Ciprian6\n"
-                + "6\nA0 Bucuresti3 1234567891230 20 da Chipescu Ciprian7\n";
+        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 nu Chipescu Ciprian5\n"
+                + "6\nA0 Bucuresti3 1234567891239 20 nu Chipescu Ciprian6\n"
+                + "6\nA0 Bucuresti3 1234567891230 20 nu Chipescu Ciprian7\n";
 
         String setup3 = setup30 + setup31 + setup32;
         String setup40 = setup3;
@@ -1260,10 +1260,10 @@ public class AppTest {
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));
         String setup21 = "0\nA0 Alegeri Electorale 2025\n1\nA0\n2\nA0 Bucuresti Muntenia\n2\nA0 Bucuresti2 Muntenia\n";
-        String setup22 = "6\nA0 Bucuresti 1234567891234 20 da Chipescu Ciprian\n"
-                + "6\nA0 Bucuresti 1234567891235 20 da Chipescu Ciprian2\n"
-                + "6\nA0 Bucuresti2 1234567891236 20 da Chipescu Ciprian3\n"
-                + "6\nA0 Bucuresti2 1234567891237 20 da Chipescu Ciprian4\n";
+        String setup22 = "6\nA0 Bucuresti 1234567891234 20 nu Chipescu Ciprian\n"
+                + "6\nA0 Bucuresti 1234567891235 20 nu Chipescu Ciprian2\n"
+                + "6\nA0 Bucuresti2 1234567891236 20 nu Chipescu Ciprian3\n"
+                + "6\nA0 Bucuresti2 1234567891237 20 nu Chipescu Ciprian4\n";
         String setup23 = "4\nA0 1234567891238 45 Dumitru Florin Ionescu\n"
                 + "4\nA0 1234567891239 45 Dumitru Florin Ionescu2\n";
         String setup30 = setup21 + setup22 + setup23;
@@ -1272,9 +1272,9 @@ public class AppTest {
         String setup31 = "2\nA0 Bucuresti3 Muntenia2\n";
 
         // mai putem inca 3 votanti in Bucuresti3
-        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 da Chipescu Ciprian5\n"
-                + "6\nA0 Bucuresti3 1234567891239 20 da Chipescu Ciprian6\n"
-                + "6\nA0 Bucuresti3 1234567891230 20 da Chipescu Ciprian7\n";
+        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 nu Chipescu Ciprian5\n"
+                + "6\nA0 Bucuresti3 1234567891239 20 nu Chipescu Ciprian6\n"
+                + "6\nA0 Bucuresti3 1234567891230 20 nu Chipescu Ciprian7\n";
 
         String setup3 = setup30 + setup31 + setup32;
         String setup40 = setup3;
@@ -1444,10 +1444,10 @@ public class AppTest {
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));
         String setup21 = "0\nA0 Alegeri Electorale 2025\n1\nA0\n2\nA0 Bucuresti Muntenia\n2\nA0 Bucuresti2 Muntenia\n";
-        String setup22 = "6\nA0 Bucuresti 1234567891234 20 da Chipescu Ciprian\n"
-                + "6\nA0 Bucuresti 1234567891235 20 da Chipescu Ciprian2\n"
-                + "6\nA0 Bucuresti2 1234567891236 20 da Chipescu Ciprian3\n"
-                + "6\nA0 Bucuresti2 1234567891237 20 da Chipescu Ciprian4\n";
+        String setup22 = "6\nA0 Bucuresti 1234567891234 20 nu Chipescu Ciprian\n"
+                + "6\nA0 Bucuresti 1234567891235 20 nu Chipescu Ciprian2\n"
+                + "6\nA0 Bucuresti2 1234567891236 20 nu Chipescu Ciprian3\n"
+                + "6\nA0 Bucuresti2 1234567891237 20 nu Chipescu Ciprian4\n";
         String setup23 = "4\nA0 1234567891238 45 Dumitru Florin Ionescu\n"
                 + "4\nA0 1234567891239 45 Dumitru Florin Ionescu2\n";
         String setup30 = setup21 + setup22 + setup23;
@@ -1456,14 +1456,14 @@ public class AppTest {
         String setup31 = "2\nA0 Bucuresti3 Muntenia2\n";
 
         // mai putem inca 3 votanti in Bucuresti3
-        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 da Chipescu Ciprian5\n"
-                + "6\nA0 Bucuresti3 1234567891239 20 da Chipescu Ciprian6\n"
-                + "6\nA0 Bucuresti3 1234567891230 20 da Chipescu Ciprian7\n";
+        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 nu Chipescu Ciprian5\n"
+                + "6\nA0 Bucuresti3 1234567891239 20 nu Chipescu Ciprian6\n"
+                + "6\nA0 Bucuresti3 1234567891230 20 nu Chipescu Ciprian7\n";
 
         String setup3 = setup30 + setup31 + setup32;
         String setup40 = setup3;
         // se fac cateva voturi
-        String setup41 = "9\nA0 Bucuresti 1234567891234 1234567891238\n"
+        String setup41 = "9\nA0 Bucuresti 1234567891234 1234567891239\n"
                 + "9\nA0 Bucuresti 1234567891235 1234567891239\n"
                 + "9\nA0 Bucuresti2 1234567891236 1234567891238\n"
                 + "9\nA0 Bucuresti2 1234567891237 1234567891239\n"
@@ -1484,7 +1484,7 @@ public class AppTest {
         App app = new App(in);
         app.run();
         String output = outputStreamCaptor.toString().trim();
-        String expected = "In Bucuresti au fost 2 voturi din 7. Adica 28%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 50% din voturile circumscriptiei.";
+        String expected = "In Bucuresti au fost 2 voturi din 7. Adica 28%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 100% din voturile circumscriptiei.";
         if (output.contains(expected)) {
             assertTrue(true);
         } else {
@@ -1583,10 +1583,10 @@ public class AppTest {
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));
         String setup21 = "0\nA0 Alegeri Electorale 2025\n1\nA0\n2\nA0 Bucuresti Muntenia\n2\nA0 Bucuresti2 Muntenia\n";
-        String setup22 = "6\nA0 Bucuresti 1234567891234 20 da Chipescu Ciprian\n"
-                + "6\nA0 Bucuresti 1234567891235 20 da Chipescu Ciprian2\n"
-                + "6\nA0 Bucuresti2 1234567891236 20 da Chipescu Ciprian3\n"
-                + "6\nA0 Bucuresti2 1234567891237 20 da Chipescu Ciprian4\n";
+        String setup22 = "6\nA0 Bucuresti 1234567891234 20 nu Chipescu Ciprian\n"
+                + "6\nA0 Bucuresti 1234567891235 20 nu Chipescu Ciprian2\n"
+                + "6\nA0 Bucuresti2 1234567891236 20 nu Chipescu Ciprian3\n"
+                + "6\nA0 Bucuresti2 1234567891237 20 nu Chipescu Ciprian4\n";
         String setup23 = "4\nA0 1234567891238 45 Dumitru Florin Ionescu\n"
                 + "4\nA0 1234567891239 45 Dumitru Florin Ionescu2\n";
         String setup30 = setup21 + setup22 + setup23;
@@ -1595,14 +1595,14 @@ public class AppTest {
         String setup31 = "2\nA0 Bucuresti3 Muntenia2\n";
 
         // mai putem inca 3 votanti in Bucuresti3
-        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 da Chipescu Ciprian5\n"
-                + "6\nA0 Bucuresti3 1234567891239 20 da Chipescu Ciprian6\n"
-                + "6\nA0 Bucuresti3 1234567891230 20 da Chipescu Ciprian7\n";
+        String setup32 = "6\nA0 Bucuresti3 1234567891238 20 nu Chipescu Ciprian5\n"
+                + "6\nA0 Bucuresti3 1234567891239 20 nu Chipescu Ciprian6\n"
+                + "6\nA0 Bucuresti3 1234567891230 20 nu Chipescu Ciprian7\n";
 
         String setup3 = setup30 + setup31 + setup32;
         String setup40 = setup3;
         // se fac cateva voturi
-        String setup41 = "9\nA0 Bucuresti 1234567891234 1234567891238\n"
+        String setup41 = "9\nA0 Bucuresti 1234567891234 1234567891239\n"
                 + "9\nA0 Bucuresti 1234567891235 1234567891239\n"
                 + "9\nA0 Bucuresti2 1234567891236 1234567891238\n"
                 + "9\nA0 Bucuresti2 1234567891237 1234567891239\n"
@@ -1625,7 +1625,7 @@ public class AppTest {
         String output = outputStreamCaptor.toString().trim();
         String expected = "In Romania au fost 7 voturi.";
         String expected2 = "In Muntenia2 au fost 3 voturi din 7. Adica 42%. Cele mai multe voturi au fost stranse de 1234567891238 Dumitru Florin Ionescu. Acestea constituie 66% din voturile regiunii.";
-        String expected3 = "In Muntenia au fost 4 voturi din 7. Adica 57%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 50% din voturile regiunii.";
+        String expected3 = "In Muntenia au fost 4 voturi din 7. Adica 57%. Cele mai multe voturi au fost stranse de 1234567891239 Dumitru Florin Ionescu2. Acestea constituie 75% din voturile regiunii.";
         if (output.contains(expected) && output.contains(expected2) && output.contains(expected3)) {
             assertTrue(true);
         } else {

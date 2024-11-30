@@ -6,7 +6,13 @@ public class Frauda {
     Circumscriptie circumscriptie;
 
     // Constructori
-    public Frauda() {}
+    public Frauda() {
+    }
+
+    public Frauda(Votant votant) {
+        this.votant = votant;
+    }
+
     public Frauda(Votant votant, Circumscriptie circumscriptie) {
         this.votant = votant;
         this.circumscriptie = circumscriptie;
@@ -16,19 +22,23 @@ public class Frauda {
     public Votant getVotant() {
         return votant;
     }
+
     public void setVotant(Votant votant) {
         this.votant = votant;
     }
+
     public Circumscriptie getCircumscriptie() {
         return circumscriptie;
     }
+
     public void setCircumscriptie(Circumscriptie circumscriptie) {
         this.circumscriptie = circumscriptie;
     }
 
+    // Suprascriu metoda toString pentru afisarea fraudelor conform cerintei
     @Override
     public String toString() {
-        return  "In " + circumscriptie.getNume() +
-                ": " + votant.getCNP() + " " + votant.getNume();
+        return "In " + votant.getCircumscriptie().getNume() +
+                ": " + votant.getCnp() + " " + votant.getNume();
     }
 }

@@ -3,19 +3,21 @@ package Tema1;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Circumscriptie {
     private String nume;
-    private String regiune;
-    private int numarVoturi;
+    private String regiune;     // numele regiunii din care face parte
 
-    // private Regiune regiune;
-    private ArrayList<Votant> votanti = new ArrayList<Votant>();
-    private ArrayList<Vot> voturi = new ArrayList<Vot>();
-    private ArrayList<Candidat> candidatiVotati = new ArrayList<Candidat>();
+    private ArrayList<Votant> votanti = new ArrayList<>();
+    private ArrayList<Vot> voturi = new ArrayList<>();
+
     // Constructori
-    public Circumscriptie() {}
+    public Circumscriptie() {
+    }
+
     public Circumscriptie(String nume, String regiune) {
         this.nume = nume;
         this.regiune = regiune;
@@ -25,120 +27,136 @@ public class Circumscriptie {
     public String getNume() {
         return nume;
     }
+
     public void setNume(String nume) {
         this.nume = nume;
     }
+
     public String getRegiune() {
         return regiune;
     }
+
     public void setRegiune(String regiune) {
         this.regiune = regiune;
     }
+
     public ArrayList<Votant> getVotanti() {
         return votanti;
     }
+
     public void setVotanti(ArrayList<Votant> votanti) {
         this.votanti = votanti;
     }
 
-    public int getNumarVoturi() {
-        return this.voturi.size();
+    public ArrayList<Vot> getVoturi() {
+        return voturi;
     }
 
-    public Votant cautaVotant(String CNP) {
+    public void setVoturi(ArrayList<Vot> voturi) {
+        this.voturi = voturi;
+    }
+
+    public int getNumarVoturi() {
+        return voturi.size();
+    }
+
+    // Cauta si returneaza votantul cu CNP-ul dat ca parametru
+    public Votant cautaVotant(String cnp) {
         // Caut votantul in lista
-        for(Votant v : votanti) {
-            if(v.getCNP().equals(CNP)) {
-                return v;
+        for (Votant v : votanti) {
+            if (v.getCnp().equals(cnp)) {
+                return v;   // am gasit votantul
             }
         }
-        return null;
+
+        return null;    // nu am gasit votantul
     }
 
-    public void adaugaVotant(String CNP, int varsta, String neindemanatic, String nume) {
-        Votant v = cautaVotant(CNP);
-        if(v != null) {
+    // Adauga votant in circumscriptie
+    public void adaugaVotant(String cnp, int varsta, String neindemanatic, String nume) {
+        // Caut si verific daca in circumscriptie exista deja un votant cu acelasi CNP
+        Votant v = cautaVotant(cnp);
+
+        // Exista deja un votant cu acelasi CNP => eroare
+        if (v != null) {
             System.out.println("EROARE: Votantul " + v.getNume() + " are deja acelasi CNP");
             return;
         }
-        v = new Votant(this, CNP, varsta, neindemanatic, nume);
-        votanti.add(v);
-        System.out.println("S-a adaugat votantul " + v.getNume());
+
+        // Nu exista votantul => il creez
+        v = new Votant(this, cnp, varsta, neindemanatic, nume);
+
+        // Verific daca votantul e valid si, in caz afirmativ, il adaug in circumscriptie
+        if (v.eValid()) {
+            votanti.add(v);
+            System.out.println("S-a adaugat votantul " + nume);
+        }
     }
 
+    // Sorteaza votantii descrescator dupa CNP
+    public void sortareVotantiCnp() {
+        Collections.sort(votanti);
+    }
+
+    // Afiseaza votantii din circumscriptie
+    public void afisareVotanti() {
+        System.out.println("Votantii din " + nume + ":");
+        for (Votant v : votanti) {
+            System.out.println(v);
+        }
+    }
+
+    // Listeaza votantii din circumscriptie
+    public void listareVotanti() {
+        // Verific daca exista votanti
+        if (votanti.isEmpty()) {
+            System.out.println("GOL: Nu sunt votanti in " + nume);
+        }
+
+        // Sortez votantii in ordine descrescatoare dupa CNP
+        sortareVotantiCnp();
+
+        // Afisez votantii ordonati
+        afisareVotanti();
+    }
+
+    // Adauga un vot in lista de voturi
     public void adaugaVot(Vot vot) {
         voturi.add(vot);
     }
-    public void adaugaCandidatVotat(Candidat c) {
-        candidatiVotati.add(c);
+
+    /* Returneaza o lista cu canidatii votati in aceasta circumscriptie,
+     * fiecare cadidat avand doar numarul de voturi din aceasta circumscriptie
+     * Sortarea este descrescatoare dupa voturi, apoi descrescatoare dupa CNP */
+    public ArrayList<Candidat> getCandidatiVotati() {
+        AnalizaCandidati analiza = new AnalizaCandidati();
+        return analiza.getCandidatiVotati(voturi);
     }
 
-    public void raportVoturi() {
-        if(voturi.isEmpty()) {
-            System.out.println("GOL: Lumea nu isi exercita dreptul de vot in " + this.nume);
-            return;
-        }
-        ArrayList<Candidat> candidati = new ArrayList<Candidat>();
-        for(Vot v : voturi) {
-            Candidat c = v.getCandidat();
-            if(!candidati.contains(c)) {
-                c.setNumarVoturi(1);
-                candidati.add(c);
-            } else {
-                c.adaugaVot();
-            }
-        }
-        // Sortare descrescator dupa voturi, apoi descrescator dupa CNP
-        candidati.sort((c1, c2) -> {
-            if (c1.getNumarVoturi() != c2.getNumarVoturi()) {
-                return Integer.compare(c2.getNumarVoturi(), c1.getNumarVoturi());
-            }
-            return c2.getCNP().compareTo(c1.getCNP());
-        });
-
-        System.out.println("Raport voturi " + this.nume + ":");
-        for(Candidat c : candidati) {
-            System.out.println(c.getNume() + " " + c.getCNP() + " - " + c.getNumarVoturi());
-        }
-        candidati.clear();
-    }
-
-
+    // Returneaza cel mai votat candidat din circumscriptie
     public Candidat celMaiVotatCandidat() {
-        ArrayList<Candidat> candidati = new ArrayList<Candidat>();
-        for(Vot v : voturi) {
-            Candidat c = v.getCandidat();
-            if(!candidati.contains(c)) {
-                c.setNumarVoturi(1);
-                candidati.add(c);
-            } else {
-                c.adaugaVot();
-            }
-        }
-        // Sortare descrescator dupa voturi, apoi descrescator dupa CNP
-        candidati.sort((c1, c2) -> {
-            if (c1.getNumarVoturi() != c2.getNumarVoturi()) {
-                return Integer.compare(c2.getNumarVoturi(), c1.getNumarVoturi());
-            }
-            return c2.getCNP().compareTo(c1.getCNP());
-        });
-
-        Candidat celMaiVotatCandidat = candidati.get(0);
-        candidati.clear();
-        return celMaiVotatCandidat;
+        AnalizaCandidati analiza = new AnalizaCandidati();
+        return analiza.getCelMaiVotatCandidat(getCandidatiVotati());
     }
-    public void analizaDetaliata(int numarVoturiNational) {
-        if(voturi.isEmpty()) {
-            System.out.println("GOL: Lumea nu isi exercita dreptul de vot in " + this.nume);
+
+    // Afiseaza raportul de voturi pentru circumscriptie
+    public void raportVoturi() {
+        // Verific daca exista voturi in circumscriptie
+        if (voturi.isEmpty()) {
+            System.out.println("GOL: Lumea nu isi exercita dreptul de vot in " + nume);
             return;
         }
-        Candidat candidat = celMaiVotatCandidat();
-        int procentajCircumscriptie = (getNumarVoturi() * 100) / numarVoturiNational;
-        int procentajCandidat = (celMaiVotatCandidat().getNumarVoturi() * 100) / getNumarVoturi();
-        System.out.println( "In " + nume + " au fost " + getNumarVoturi() + " voturi din " + numarVoturiNational +
-                ". Adica " + procentajCircumscriptie + "%. Cele mai multe voturi au fost stranse de " + celMaiVotatCandidat().getCNP() + " " +
-                celMaiVotatCandidat().getNume() + ". Acestea constituie " + procentajCandidat + "% din voturile circumscriptiei.");
+
+        // Aflu candidatii votati si nr. de voturi corespunzator fiecarui candidat din circumscriptie
+        ArrayList<Candidat> candidatiVotati = getCandidatiVotati();
+
+        // Sortez candidatii descrescator dupa voturi, apoi descrescator dupa CNP
+        candidatiVotati.sort(new ComparatorVoturiCnp());
+
+        // Afisez raportul de voturi in ordinea corespunzatoare
+        System.out.println("Raport voturi " + nume + ":");
+        for (Candidat c : candidatiVotati) {
+            System.out.println(c.getNume() + " " + c.getCnp() + " - " + c.getNumarVoturi());
+        }
     }
-
-
 }

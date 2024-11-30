@@ -1,15 +1,16 @@
 package Tema1;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Regiune {
+public class Regiune implements Comparable<Regiune> {
     private String nume;
-    private double procentajNational;
-    private double procentajCandidat;
+    private ArrayList<Circumscriptie> circumscriptii = new ArrayList<>();
 
-    private ArrayList<Vot> voturi = new ArrayList<Vot>();
+    // Constructori
+    public Regiune() {
+    }
 
-    public Regiune() {}
     public Regiune(String nume) {
         this.nume = nume;
     }
@@ -18,40 +19,56 @@ public class Regiune {
     public String getNume() {
         return nume;
     }
+
     public void setNume(String nume) {
         this.nume = nume;
     }
+
+    public void adaugaCircumscriptie(Circumscriptie c) {
+        circumscriptii.add(c);
+    }
+
+    // Returneaza numarul de voturi din regiune
+    public int getNumarVoturi() {
+        int numarVoturi = 0;
+        for (Circumscriptie c : circumscriptii) {
+            numarVoturi += c.getNumarVoturi();
+        }
+        return numarVoturi;
+    }
+
+    // Returneza candidatii votati in regiune cu numarul corespunzator de voturi
+    public ArrayList<Candidat> getCandidatiVotati() {
+        AnalizaCandidati analiza = new AnalizaCandidati();
+        return analiza.getCandidatiVotati(getVoturi());
+    }
+
+    // Afiseaza candidatii votati din regiune
+    public void afisareCandidatiVotati() {
+        ArrayList<Candidat> candidatiVotati = getCandidatiVotati();
+        for (Candidat c : candidatiVotati) {
+            System.out.println(c + " " + c.getNumarVoturi());
+        }
+    }
+
+    // Returneaza cel mai votat candidat din regiune
+    public Candidat celMaiVotatCandidat() {
+        AnalizaCandidati analiza = new AnalizaCandidati();
+        return analiza.getCelMaiVotatCandidat(getCandidatiVotati());
+    }
+
+    // Returneaza o lista cu toate voturile din regiune
     public ArrayList<Vot> getVoturi() {
+        ArrayList<Vot> voturi = new ArrayList<>();
+        for (Circumscriptie c : circumscriptii) {
+            voturi.addAll(c.getVoturi());
+        }
         return voturi;
     }
-    public int getNrVoturi() {
-        return voturi.size();
-    }
-    public void adaugaVot(Vot vot) {
-        voturi.add(vot);
-    }
-    public Candidat celMaiVotatCandidat() {
-        ArrayList<Candidat> candidati = new ArrayList<Candidat>();
-        for(Vot v : voturi) {
-            Candidat c = v.getCandidat();
-            if(!candidati.contains(c)) {
-                c.setNumarVoturi(1);
-                candidati.add(c);
-            } else {
-                c.adaugaVot();
-            }
-        }
-        // Sortare descrescator dupa voturi, apoi descrescator dupa CNP
-        candidati.sort((c1, c2) -> {
-            if (c1.getNumarVoturi() != c2.getNumarVoturi()) {
-                return Integer.compare(c2.getNumarVoturi(), c1.getNumarVoturi());
-            }
-            return c2.getCNP().compareTo(c1.getCNP());
-        });
 
-        Candidat celMaiVotatCandidat = candidati.get(0);
-        candidati.clear();
-        return celMaiVotatCandidat;
+    // Suprascriu metoda compateTo a.i. refiunile sa se ordoneze descrescator dupa nume
+    @Override
+    public int compareTo(Regiune r) {
+        return r.getNume().compareTo(this.getNume());
     }
-
 }
