@@ -8,7 +8,6 @@ public class Circumscriptie {
     private String regiune;     // numele regiunii din care face parte
     private ArrayList<Votant> votanti = new ArrayList<>();
     private ArrayList<Vot> voturi = new ArrayList<>();
-    private ManagerVotanti managerVotanti = new ManagerVotanti(this);
 
     // Constructori
     public Circumscriptie() {
@@ -28,10 +27,6 @@ public class Circumscriptie {
         return regiune;
     }
 
-    public ArrayList<Votant> getVotanti() {
-        return votanti;
-    }
-
     public ArrayList<Vot> getVoturi() {
         return voturi;
     }
@@ -40,63 +35,68 @@ public class Circumscriptie {
         return voturi.size();
     }
 
+    // Sorteaza votantii descrescator dupa CNP
+    public void sortareVotantiCnp() {
+        Collections.sort(votanti);
+    }
+
     // Adauga votant in circumscriptie
-    public void adaugaVotant(String cnp, int varsta, String neindemanatic, String nume) {
-        managerVotanti.adaugaVotant(cnp, varsta, neindemanatic, nume);
+    public void adaugaVotant(String cnp, int varsta, String neindemanatic, String numeVotant) {
+        // Caut si verific daca in circumscriptie exista deja un votant cu acelasi CNP
+        Votant v = cautaVotant(cnp);
+
+        // Exista deja un votant cu acelasi CNP => eroare
+        if (v != null) {
+            System.out.println("EROARE: Votantul " + v.getNume() + " are deja acelasi CNP");
+            return;
+        }
+
+        // Nu exista votantul => il creez
+        v = new Votant(this, cnp, varsta, neindemanatic, numeVotant);
+
+        // Verific daca votantul e valid si, in caz afirmativ, il adaug in circumscriptie
+        if (v.esteValid()) {
+            votanti.add(v);
+            System.out.println("S-a adaugat votantul " + numeVotant);
+        }
+    }
+
+    // Afiseaza votantii din circumscriptie
+    public void afisareVotanti() {
+        System.out.println("Votantii din " + this.nume + ":");
+        for (Votant v : votanti) {
+            System.out.println(v);
+        }
     }
 
     // Listeaza votantii din circumscriptie
     public void listareVotanti() {
-        managerVotanti.listareVotanti();
+        // Verific daca exista votanti
+        if (votanti.isEmpty()) {
+            System.out.println("GOL: Nu sunt votanti in " + this.nume);
+        }
+
+        // Sortez votantii in ordine descrescatoare dupa CNP
+        sortareVotantiCnp();
+
+        // Afisez votantii ordonati
+        afisareVotanti();
     }
 
-    // Adauga un vot in lista de voturi a circumscriptiei
+    // Adauga vot in circumscriptie
     public void adaugaVot(Vot vot) {
         voturi.add(vot);
     }
 
-    // Verifica daca votantul a incercat sa comita o frauda
-    public boolean incercareFrauda(String cnpVotant, Alegeri alegeri) {
-        Votant votant = managerVotanti.cautaVotant(cnpVotant);
-        if (votant == null || votant.aVotat()) {
-            // Adaug frauda in lista de fraude din alegeri si afisez eroarea
-            alegeri.adaugaFrauda(new Frauda(votant));
-            System.out.println("FRAUDA: Votantul cu CNP-ul " + cnpVotant +
-                    " a incercat sa comita o frauda. Votul a fost anulat");
-            return true;
+    // Cauta si returneaza votantul cu CNP-ul dat ca parametru
+    public Votant cautaVotant(String cnp) {
+        // Caut votantul in lista
+        for (Votant v : votanti) {
+            if (v.getCnp().equals(cnp)) {
+                return v;   // am gasit votantul
+            }
         }
-
-        // Votantul a fost cinstit
-        return false;
-    }
-
-    // Inregistrez votul votantului pentru candidat
-    public void inregistrareVot(Votant votant, Candidat candidat) {
-        votant.setVotat(true);
-        Vot vot = new Vot(votant, candidat);
-
-        // Verific daca votul este valid
-        if (vot.getValid()) {
-            candidat.adaugaVot();   // adaug votul candidatului
-            adaugaVot(vot);         // adaug votul in lista de voturi
-        }
-
-        // Afisez mesajul pentru succes
-        System.out.println(votant.getNume() + " a votat pentru " + candidat.getNume());
-    }
-
-    // Metoda prin care se voteaza in circumscriptie
-    public void votare(String cnpVotant, String cnpCandidat, Alegeri alegeri) {
-        // Verific daca exista candidatul
-        Candidat candidat = alegeri.cautaCandidat(cnpCandidat);
-        if (candidat == null) return;
-
-        // Verific daca votantul a incercat sa comita o frauda
-        if (incercareFrauda(cnpVotant, alegeri)) return;
-
-        // Votantul a fost cinstit, deci inregistrez votul
-        Votant votant = managerVotanti.cautaVotant(cnpVotant);
-        inregistrareVot(votant, candidat);
+        return null;    // nu am gasit votantul
     }
 
     // Returneaza o lista cu canidatii votati in aceasta circumscriptie
@@ -108,5 +108,4 @@ public class Circumscriptie {
     public Candidat celMaiVotatCandidat() {
         return new ManagerCandidati(candidatiVotati()).celMaiVotatCandidat();
     }
-
 }

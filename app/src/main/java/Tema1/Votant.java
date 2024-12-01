@@ -5,7 +5,6 @@ public class Votant extends Persoana {
     private String neindemanatic;
     private boolean votat;          // true -> candidatul a votat; false -> candidatul nu a votat
 
-
     // Constructori
     public Votant() {
     }
@@ -33,7 +32,7 @@ public class Votant extends Persoana {
         this.neindemanatic = neindemanatic;
     }
 
-    public boolean aVotat() {
+    public boolean getVotat() {
         return votat;
     }
 
@@ -41,19 +40,18 @@ public class Votant extends Persoana {
         this.votat = votat;
     }
 
-    /* Verifica daca canditatul are varsta valida
-     * daca varsta > 18 -> true
-     * in caz contrar -> false si scrie eroarea corespunzatoare */
+    // Verifica daca canditatul are varsta valida
     public boolean varstaValida() {
         if (this.getVarsta() > 18) {
             return true;
         }
+
+        // Candidatul nu are varsta valida => eroare
         System.out.println("EROARE: Varsta invalida");
         return false;
     }
 
-    /* Verifica daca canditatul este valid, adica daca
-     * are CNP valid si are varsta mai mare de 35 de ani */
+    // Verifica daca canditatul este valid (are si varsta si CNP-ul valide)
     public boolean esteValid() {
         return cnpValid() && varstaValida();
     }

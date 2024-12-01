@@ -160,6 +160,43 @@ public class Alegeri {
         managerCandidati.listareCandidati();
     }
 
+    // Metoda prin care se voteaza in circumscriptie
+    public void votare(String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
+        // Verific daca este perioada de votare
+        if (!estePerioadaDeVotare()) return;
+
+        // Verific daca exista circumscriptia
+        Circumscriptie circumscriptie = cautaCircumscriptie(numeCircumscriptie);
+        if(circumscriptie == null) return;
+
+        // Verific daca exista candidatul
+        Candidat candidat = cautaCandidat(cnpCandidat);
+        if (candidat == null) return;
+
+        // Verific daca votantul a incercat sa comita o frauda
+        Votant votant = circumscriptie.cautaVotant(cnpVotant);
+        if (votant == null || votant.getVotat()) {
+            // Adaug frauda in lista de fraude din alegeri si afisez eroarea
+            fraude.add(new Frauda(votant));
+            System.out.println("FRAUDA: Votantul cu CNP-ul " + cnpVotant +
+                    " a incercat sa comita o frauda. Votul a fost anulat");
+            return;
+        }
+
+        // Votantul a fost cinctit, deci inregistrez votul
+        Vot vot = new Vot(votant, candidat);
+        votant.setVotat(true);
+
+        // Verific daca votul este valid si il adaug in circumcriptie si candidatului
+        if(vot.getValid()) {
+            circumscriptie.adaugaVot(vot);
+            candidat.adaugaVot();
+        }
+
+        // Afisez mesajul de succes
+        System.out.println(votant.getNume() + " a votat pentru " + candidat.getNume());
+    }
+
     // Opreste alegerile
     public void oprireAlegeri() {
         // Verific daca este perioada de votare
@@ -206,11 +243,6 @@ public class Alegeri {
             numarVoturiNatioanal += c.getNumarVoturi();
         }
         return numarVoturiNatioanal;
-    }
-
-    // Adauga fraduda in alegeri
-    public void adaugaFrauda(Frauda frauda) {
-        fraude.add(frauda);
     }
 
     // Suprascriu metoda toString pentru listarea alegerilor conform cerintei
