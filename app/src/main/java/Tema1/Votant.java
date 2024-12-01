@@ -57,5 +57,4 @@ public class Votant extends Persoana {
     public boolean esteValid() {
         return cnpValid() && varstaValida();
     }
-
 }

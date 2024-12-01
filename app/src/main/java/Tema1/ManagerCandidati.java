@@ -4,28 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ManagerCandidati {
-    private ArrayList<Candidat> candidati = new ArrayList<Candidat>();
-    private Alegeri alegeri;
+    private ArrayList<Candidat> candidati = new ArrayList<>();
 
     // Constructori
     public ManagerCandidati() {
     }
 
     public ManagerCandidati(ArrayList<Candidat> candidati) {
-        this.candidati = candidati;
-    }
-
-    public ManagerCandidati(Alegeri alegeri) {
-        this.alegeri = alegeri;
-        this.candidati = alegeri.getCandidati();
-    }
-
-    // Gettere si setter
-    public ArrayList<Candidat> getCandidati() {
-        return candidati;
-    }
-
-    public void setCandidati(ArrayList<Candidat> candidati) {
         this.candidati = candidati;
     }
 

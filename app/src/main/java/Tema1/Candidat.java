@@ -18,33 +18,23 @@ public class Candidat extends Persoana {
         return numarVoturi;
     }
 
-    public void setNumarVoturi(int numarVoturi) {
-        this.numarVoturi = numarVoturi;
-    }
-
-    // Sterge voturile cadidatului
-    public void anuleazaVoturi() {
-        this.numarVoturi = 0;
-    }
-
     // Adauga un vot candidatului
     public void adaugaVot() {
         this.numarVoturi++;
     }
 
-    /* Verifica daca canditatul are varsta valida
-     * daca varsta > 35 -> true
-     * in caz contrar -> false si scrie eroarea corespunzatoare */
+    // Verifica daca canditatul are varsta valida
     public boolean varstaValida() {
         if (this.getVarsta() > 35) {
             return true;
         }
+
+        // Varsta invalida => eroare
         System.out.println("EROARE: Varsta invalida");
         return false;
     }
 
-    /* Verifica daca canditatul este valid, adica daca
-     * are si CNP-ul si varsta valide  */
+    // Verifica daca candidatul este valid (are varsta si CNP-ul valide)
     public boolean esteValid() {
         return cnpValid() && varstaValida();
     }

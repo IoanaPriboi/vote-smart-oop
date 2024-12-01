@@ -3,6 +3,7 @@ package Tema1;
 import java.util.ArrayList;
 
 public class Raport {
+
     // Afiseaza raportul de voturi pentru circumscriptie
     public void raportCircumscriptie(Circumscriptie circumscriptie) {
         // Verific daca nu a votat nimeni in circumscriptie

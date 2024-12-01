@@ -58,6 +58,7 @@ public class ManagerAlegeri {
 
     // Porneste alegerile
     public void pornesteAlegeri(String id) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
@@ -67,25 +68,31 @@ public class ManagerAlegeri {
 
     // Adauga circumscriptia in alegeri
     public void adaugaCircumscriptie(String id, String nume, String regiune) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Adaug circumscriptia in alegeri
         a.adaugaCircumscriptie(nume, regiune);
     }
 
     // Elimina circumscriptia din alegeri
     public void eliminaCircumscriptie(String id, String nume) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Elimin circumscriptia
         a.eliminaCircumscriptie(nume);
     }
 
     // Adauga candidat in alegeri
     public void adaugaCandidat(String id, String cnp, int varsta, String nume) {
+        // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Adaug candidatul in alegeri
         a.adaugaCandidat(cnp, varsta, nume);
     }
 
@@ -104,15 +111,13 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Verific daca este perioada de votare
-        if (!a.getStagiu().equals("IN_CURS")) {
-            System.out.println("EROARE: Nu este perioada de votare");
-            return;
-        }
+        if (!a.estePerioadaDeVotare()) return;
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
         if (c == null) return;
 
+        // Adaug votantul in circumscriptie
         c.adaugaVotant(cnp, varsta, neindemanatic, numeVotant);
     }
 
@@ -122,6 +127,7 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Listez candidatii din alegeri
         a.listareCandidati();
     }
 
@@ -149,6 +155,9 @@ public class ManagerAlegeri {
         // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
+
+        // Verific daca este perioada de votare
+        if (!a.estePerioadaDeVotare()) return;
 
         // Verific daca exista circumscriptia
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);

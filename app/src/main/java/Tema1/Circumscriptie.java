@@ -24,32 +24,16 @@ public class Circumscriptie {
         return nume;
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
     public String getRegiune() {
         return regiune;
-    }
-
-    public void setRegiune(String regiune) {
-        this.regiune = regiune;
     }
 
     public ArrayList<Votant> getVotanti() {
         return votanti;
     }
 
-    public void setVotanti(ArrayList<Votant> votanti) {
-        this.votanti = votanti;
-    }
-
     public ArrayList<Vot> getVoturi() {
         return voturi;
-    }
-
-    public void setVoturi(ArrayList<Vot> voturi) {
-        this.voturi = voturi;
     }
 
     public int getNumarVoturi() {
@@ -115,8 +99,7 @@ public class Circumscriptie {
         inregistrareVot(votant, candidat);
     }
 
-    /* Returneaza o lista cu canidatii votati in aceasta circumscriptie,
-     * fiecare cadidat avand doar numarul de voturi din aceasta circumscriptie */
+    // Returneaza o lista cu canidatii votati in aceasta circumscriptie
     public ArrayList<Candidat> candidatiVotati() {
         return new ManagerCandidati().candidatiVotati(voturi);
     }

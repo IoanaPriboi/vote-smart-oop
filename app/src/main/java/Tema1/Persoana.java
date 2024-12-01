@@ -20,32 +20,16 @@ abstract public class Persoana implements Comparable<Persoana> {
         return nume;
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
     public String getCnp() {
         return cnp;
-    }
-
-    public void setcCnp(String cnp) {
-        this.cnp = cnp;
     }
 
     public int getVarsta() {
         return varsta;
     }
 
-    public void setVarsta(int varsta) {
-        this.varsta = varsta;
-    }
-
-    /* Verifica daca persoana are CNP-ul valid
-     * daca CNP-ul are lungimea 13 -> true
-     * in caz contrar -> false si scrie eroarea corespunzatoare
-     */
+    // Verifica daca persoana are CNP-ul valid
     public boolean cnpValid() {
-        // CNP valid
         if (cnp != null && cnp.length() == 13) {
             return true;
         }

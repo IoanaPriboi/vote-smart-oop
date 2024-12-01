@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Analiza {
-    // Constructor
-    public Analiza() {
-    }
 
     // Afiseaza analiza detaliata per circumscriptie
     public void analizaDetaliataPerCircumscriptie(Alegeri alegeri, Circumscriptie circumscriptie) {
@@ -51,7 +48,7 @@ public class Analiza {
         }
 
         // Obtin regiunile din alegeri si le sortez descrescator, dupa nume
-        ArrayList<Regiune> regiuni = alegeri.getRegiuni();
+        ArrayList<Regiune> regiuni = alegeri.regiuni();
         Collections.sort(regiuni);
 
         // Afisez analiza pentru fiecare regiune (adica pe plan national)
@@ -59,11 +56,11 @@ public class Analiza {
 
         for (Regiune r : regiuni) {
             // Calculez procentajele
-            int procentaRegiune = (r.getNumarVoturi() * 100) / numarVoturiNational;
-            int procentajCandidat = (r.celMaiVotatCandidat().getNumarVoturi() * 100) / r.getNumarVoturi();
+            int procentaRegiune = (r.numarVoturi() * 100) / numarVoturiNational;
+            int procentajCandidat = (r.celMaiVotatCandidat().getNumarVoturi() * 100) / r.numarVoturi();
 
             // Afisez textul
-            System.out.println("In " + r.getNume() + " au fost " + r.getNumarVoturi() + " voturi din " + numarVoturiNational +
+            System.out.println("In " + r.getNume() + " au fost " + r.numarVoturi() + " voturi din " + numarVoturiNational +
                     ". Adica " + procentaRegiune + "%. Cele mai multe voturi au fost stranse de " + r.celMaiVotatCandidat().getCnp() +
                     " " + r.celMaiVotatCandidat().getNume() + ". Acestea constituie " + procentajCandidat + "% din voturile regiunii.");
         }

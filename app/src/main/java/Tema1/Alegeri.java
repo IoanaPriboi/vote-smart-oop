@@ -8,8 +8,8 @@ public class Alegeri {
     private String stagiu;      // "NEINCEPUT", "IN_CURS" sau "TERMINAT"
     private ArrayList<Circumscriptie> circumscriptii = new ArrayList<>();
     private ArrayList<Candidat> candidati = new ArrayList<>();
-    private ManagerCandidati managerCandidati = new ManagerCandidati(candidati);
     private ArrayList<Frauda> fraude = new ArrayList<>();
+    private ManagerCandidati managerCandidati = new ManagerCandidati(candidati);
 
     // Constructori
     public Alegeri() {
@@ -35,10 +35,6 @@ public class Alegeri {
         return nume;
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
     public String getStagiu() {
         return stagiu;
     }
@@ -57,35 +53,6 @@ public class Alegeri {
 
     public ArrayList<Frauda> getFraude() {
         return fraude;
-    }
-
-    // Construieste si returneaza o lista cu regiunile din alegeri
-    public ArrayList<Regiune> getRegiuni() {
-        // Parcurg circumscriptiile si formez lista de regiuni
-        ArrayList<Regiune> regiuni = new ArrayList<>();
-        for (Circumscriptie c : circumscriptii) {
-            String numeRegiune = c.getRegiune();
-
-            // Verific daca regiunea exista deja in lista de regiuni
-            boolean exista = false;
-            for (Regiune r : regiuni) {
-                if (r.getNume().equals(numeRegiune)) {
-                    r.adaugaCircumscriptie(c);  // daca exista doar ii adaug circumscriptia
-                    exista = true;
-                    break;
-                }
-            }
-
-            // Daca nu exista o adaug in lista si ii adaug circumscriptia
-            if (!exista) {
-                Regiune r = new Regiune(numeRegiune);
-                r.adaugaCircumscriptie(c);
-                regiuni.add(r);
-            }
-        }
-
-        // Returnez lista rezultata
-        return regiuni;
     }
 
     // Verifica daca este perioada de votare
@@ -184,7 +151,7 @@ public class Alegeri {
     // Listeaza candidatii din sesiunea de alegeri ordonati descrescator dupa CNP
     public void listareCandidati() {
         // Verific daca au inceput alegerile
-        if (!(getStagiu().equals("IN_CURS") || getStagiu().equals("TERMINAT"))) {
+        if (!(stagiu.equals("IN_CURS") || stagiu.equals("TERMINAT"))) {
             System.out.println("EROARE: Inca nu au inceput alegerile");
             return;
         }
@@ -201,6 +168,35 @@ public class Alegeri {
         // Marchez alegerile ca terminate
         setStagiu("TERMINAT");
         System.out.println("S-au terminat alegerile " + nume);
+    }
+
+    // Construieste si returneaza o lista cu regiunile din alegeri
+    public ArrayList<Regiune> regiuni() {
+        // Parcurg circumscriptiile si formez lista de regiuni
+        ArrayList<Regiune> regiuni = new ArrayList<>();
+        for (Circumscriptie c : circumscriptii) {
+            String numeRegiune = c.getRegiune();
+
+            // Verific daca regiunea exista deja in lista de regiuni
+            boolean exista = false;
+            for (Regiune r : regiuni) {
+                if (r.getNume().equals(numeRegiune)) {
+                    r.adaugaCircumscriptie(c);  // daca exista doar ii adaug circumscriptia
+                    exista = true;
+                    break;
+                }
+            }
+
+            // Daca nu exista o adaug in lista si ii adaug circumscriptia
+            if (!exista) {
+                Regiune r = new Regiune(numeRegiune);
+                r.adaugaCircumscriptie(c);
+                regiuni.add(r);
+            }
+        }
+
+        // Returnez lista rezultata
+        return regiuni;
     }
 
     // Returneaza numarul de voturi pe plan national (din toate circumscriptiile)
