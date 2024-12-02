@@ -10,15 +10,15 @@ In cadrul aplicatiei, prin intermediul unui meniu sugestiv de comenzi,
 utilizatorul poate crea alegeri, adauga circumscriptii, votanti si candidati, 
 poate inregistra voturi. Dupa incheierea alegerilor, se pot genera rapoarte pentru voturi 
 si analize detaliate, atat per circumscriptie, cat si pe plan national. 
-De asemenea, exista si functii pentru validarea datelor si gestionarea tentativelor de frauda,
+De asemenea, platforma contine si functii pentru validarea datelor si gestionarea tentativelor de frauda,
 pentru a asigura corectitudinea procesului electoral.
 
 ## Funtionalitati
 
 ### 1. Interactiune user-friendly
-* Aplicatia este usor de utilizat, implementand un sistem bazat pe comenzi textuale, in consola.
-* Utilizatorul are acces la un meniu de comenzi clar si detaliat, iar fiecare optiune este explicata pas cu pas. 
-* Mesajele de eroare sunt intuitive, oferind utilizatorului informatii clare despre actiunile care nu au fost efectuate corect.
+* Aplicatie usor de utilizat, implementand un sistem bazat pe comenzi tip text, in consola.
+* Meniu de comenzi clar si detaliat, iar fiecare optiune fiind explicata. 
+* Mesaje de eroare intuitive, oferind utilizatorului informatii clare despre actiunile care nu au fost efectuate corect.
 
 ### 2. Gestioarea procesului electoral
 * Crearea sesiunilor de alegeri, cu optiuni de pornire, oprire, stergere.
@@ -33,14 +33,11 @@ pentru a asigura corectitudinea procesului electoral.
 
 ## Structura programului
 
-Pentru rezolvarea temei, am incercat sa gandesc o structura cat 
-mai fireasca (fiind vorba de programare orientata pe obiecte). 
-Astfel, voi scrie si explica mai jos fiecare clasa implementata, 
-impreuna cu atributele si functionalitatile principale (a se vedea 
-si comentariile din cod pentru detalii suplimentare)
+Pentru rezolvarea temei, am incercat sa gandesc o structura cat mai fireasca (fiind vorba de programare orientata pe obiecte). 
+Astfel, voi oferi detalii despre fiecare clasa implementata (pentru cele mai importante => mai multe detalii, pentru cele mai putin importante => mai putine detalii :))
 
 ###### Observatie: Toate atributele sunt private (pentru a respecta principiul incapsularii), iar toate metodele sunt publice pentru a permite interactiunea cu obiectele intr-un mod controlat.
-
+###### Am folosit ArrayLists pentru implementarea tablourilor unidimensionale, prin urmare am utilizat metodele predefinite pentru adaugare, stergere, sortare etc. (`add`, `remove` etc.).
 
 ### App
 **Clasa App** reprezinta punctul de interactiune principal dintre utilizator si aplicatie. 
@@ -49,7 +46,7 @@ un `Scanner` pentru citirea inputului de la tastatura si logica de rulare a apli
 Am personalizat afisarea in consola pentru a face rularea programului cat mai clara si intuitiva.
 
 #### <ins> Atribute:
-* `private Scanner scanner`-> se folosește pentru citirea de la tastatură (face parte din schelet)
+* `private Scanner scanner`-> se foloseste pentru citirea de la tastatura (face parte din schelet)
 
 #### <ins> Metode (functionalitati generale):
 * `public App(InputStream input)` -> ajuta la citirea inputului (face parte din schelet)
@@ -63,9 +60,10 @@ Am personalizat afisarea in consola pentru a face rularea programului cat mai cl
 ###### Observatie: Introducerea unei comenzi invalide (un numar < 0 sau > 18) va afisa un mesaj sugestiv, dar nu va duce la oprirea programului, user-ul putand sa introduca ulterior o alta comanda. Programul se va opri doar cand se introduce numarul 18 (Iesire).
 
 ### ManagerAlegeri
-Este o clasa auxiliara care ma ajuta sa gestionez intreaga lista de alegeri si sa execut comenzile introduse de user intr-un mod cat mai clar.
-In general, in fiecare metoda din aceasta clasa verific daca exista alegerile cu id-ul dat, apoi apelez mai departe functia principala care implementeaza functionalitatea comenzii.
-In unele cazuri, atunci cand e nevoie sa apelez o metoda din clasa Circumscriptie, verific si daca este indeplinita condita de desfasurare a alegerilor si daca circumscriptia data se afla in alegeri.
+Clasa **ManagerAlegeri** este o clasa auxiliara care gestioneaza lista completa de alegeri si executa 
+comenzile introduse de utilizator intr-un mod organizat si clar (poate fi privita ca un manager pentru comenzi).
+De obicei, fiecare metoda identifica sesiunea de alegeri corespunzatoare pe baza id-ului, daca se afla in stagiul corespunzator si dupa care apeleaza functia principala care implementeaza comanda dorita.
+In anumite situatii, atunci cand este necesar sa interactionez cu clasa Circumscriptie, verific si daca circumscriptia exista in sesiunea electorala.
 
 ###### Obesrvatie: Fiind destul de repetitivi pasii si logica metodelor din aceasta clasa, voi detalia doar acolo unde cred ca este necesar (a se vedea si comentariile din cod)
 
@@ -74,46 +72,19 @@ In unele cazuri, atunci cand e nevoie sa apelez o metoda din clasa Circumscripti
 * `private Analiza analiza = new Analiza()` -> ma ajuta sa apelez metodele de analiza
 * `private Raport raport = new Raport() ` -> ma ajuta sa apelez metodele de rapoarte
 
-#### <ins> Constructori:
-* `public ManagerAlegeri()` -> folosesc doar "no-args constructor", intru-cat initializez toate atributele cand le declar 
-
-#### <ins> Metode:
+#### <ins> Metode (functionalitati principale):
 * `public Alegeri cautaAlegeri(String id)` -> cauta si returneaza alegerile cu id-ul dat ca parametru
   * intoarce obiectul de tip Alegeri daca a gasit alegerile in lista
   * intoarce null si afiseaza eroarea corespunzatoare daca nu a gasit alegerile in lista
 * `public void creeazaAlegeri(String id, String nume)` -> creeaza alegerile cu id-ul dat
   * verific daca exista deja alegeri cu acelasi id
-    * daca exista: afisez eroarea corespunzatoatre si opresc executia functiei
-    * daca nu exista: creez o sesiune noua de alegeri, le adaug in lista si afisez mesajul de succes
-* `public void pornesteAlegeri(String id)` -> porneste alegerile cu id-ul dat
+    * exista => afisez eroarea corespunzatoatre si opresc executia functiei
+    * nu exista => creez o sesiune noua de alegeri, le adaug in lista si afisez mesajul de succes
+* `public void pornireAlegeri(String id)` -> porneste alegerile cu id-ul dat
   * verific daca exista alegerile in lista cu ajutorul functiei `cautaAlegeri`
-    * daca nu exista: opresc executia programului (eroarea se va afisa automat in functia `cautaAlegeri`)
-    * daca exista: apelez metoda corespunzatoare pentru alegerile gasite
-* `public void adaugaCircumscriptie(String id, String nume, String regiune)` -> adauga circumsriptia in alegeri
-  * verific daca exista alegerile in lista cu ajutorul functiei `cautaAlegeri`
-    * daca nu exista: opresc executia programului (eroarea se va afisa automat in functia `cautaAlegeri`)
-    * daca exista: apelez metoda corespunzatoare pentru alegerile gasite
-* `public void eliminaCircumscriptie(String id, String nume)` -> elimina circumscriptia din alegeri
-* `public void adaugaCandidat(String id, String cnp, int varsta, String nume)` -> adauga candidatul in alegeri
-* `public void eliminaCandidat(String id, String cnp)` -> elimina candidatul din alegeri
-* `public void adaugaVotant(String id, String numeCircumscriptie, String cnp, int varsta, String neindemanatic, String numeVotant)` -> adauga votant in circumscriptie
-  * verific daca exista alegerile in lista cu ajutorul functiei `cautaAlegeri`
-    * daca nu exista: opresc executia functiei (eroarea se va afisa automat in functia `cautaAlegeri`)
-    * daca exista: verific daca este perioada de votare, apoi daca circumsriptia exista in sesiunea de alegeri. Daca toate conditiile sunt indeplinite apelez metoda `adaugaVotant(cnp, varsta, neindemanatic, numeVotant)` pentru circumscriptia gasita
-* `public void listareCandidati(String id)` -> listeaza candidatii din sesiunea de alegeri, in ordine _descrescatoare_ dupa CNP
-* `public void listareVotanti(String id, String numeCircumscriptie)` -> listeaza votantii  din circumscriptie, in ordine _descrescatoare_ dupa CNP
-* `public void votare(String id, String numeCircumscriptie, String cnpVotant, String cnpCandidat)` -> implementeaza comanda de votare, inregistrand un vot in circumscriptia cu numele `numeCircumscriptie`, de la votantul cu CNP-ul `cnpVotant` catre candidatul cu CNP-ul `cnpCandidat`
+    * nu exista => opresc executia programului (eroarea se va afisa automat in functia `cautaAlegeri`)
+    * exista => verific daca alegerile nu au inceput deja si apelez metoda `pornireAlegeri` pentru alegerile gasite
 * `public void oprireAlegeri(String id)` -> opreste alegerile cu id-ul dat
-* `public void raportCircumscriptie(String id, String numeCircumscriptie)` -> afiseaza raportul voturilor din circumscriptia cu numele dat
-  * apeleaza metoda `raportCircumscriptie(c)`, prin intermediul campului `raport`
-* `public void raportNational(String id)` -> afiseaza raportul de voturi pe plan national (pentru toate circumscriptiile)
-  * apeleaza metoda `raportNational(a)`, prin intremediul campului `raport`
-* `public void analizaDetaliataCircumscriptie(String id, String numeCircumscriptie)` -> afiseaza analiza detaliata pentru circumscriptia cu numele dat ca parametru
-    * apeleaza metoda `analizaDetaliataPerCircumscriptie(a, c)`, prin intermediul campului `analiza`
-* `public void analizaDetaliataNational(String id)` -> afiseza analiza detaliata pe plan national
-  * apeleaza metoda `analizaDetaliataNational(a)`, prin intermediul campului analiza
-* `public void rapoarteFraude(String id)` -> afiseaza raportul cu toate fraudele din alegeri, in ordinea inversa in care au fost comise (LIFO, ca intr-o stiva)
-  * apeleaza metoda `raportFraude(a)`, prin intermediul campului `raport`
 * `public void listareAlegeri()` -> listeaza toate alegerile in ordinea in care au fost create
   * verific daca exista alegeri in lista:
     * lista goala => afisez eroarea corespunzatoare si opresc executia functiei
@@ -124,6 +95,8 @@ In unele cazuri, atunci cand e nevoie sa apelez o metoda din clasa Circumscripti
     * exista => o elimin din lista si afisez mesajul de succes
 
 ### Alegeri
+Clasa **Alegeri** reprezinta o sesiune de alegeri si are rolul de a gestiona circumscriptiile, candidatii si procesul de votare. 
+Aici sunt centralizate toate informatiile si actiunile legate de o sesiune de alegeri, fiind cea mai importanta clasa din program.
 
 #### <ins> Atribute:
 * `private String id` -> id-ul alegerilor
@@ -132,26 +105,191 @@ In unele cazuri, atunci cand e nevoie sa apelez o metoda din clasa Circumscripti
   * _"NEINCEPUT"_ => alegerile nu au inceput inca
   * _"IN_CURS"_ => alegerile sunt in curs de desfasurare
   * _"TERMINAT"_ => Alegerile s-au incheiat
+* `private ArrayList<Circumscriptie> circumscriptii` -> lista cu toate circumscriptiile din sesiunea de alegeri
+* `private ArrayList<Candidat> candidati` -> lista cu toti candidatii din alegeri
+* `private ArrayList<Frauda> fraude` -> lista cu toate fraudele comise in timpul alegerilor
+* `private ManagerCandidati managerCandidati` -> atribut folosit pentru gestionarea candidatilor din alegeri
 
-#### <ins> Metode:
-* Constructori cu parametrii si fara parametrii
-* Gettere si settere pentru toate atributele
-* 
+#### <ins> Metode (functionalitati principale):
+
+##### 1. Gestionarea sesiunii curente de alegeri
+* `public void pornireAlegeri(String id)` -> porneste sesiunea de alegeri
+  * setez stagiul ca fiind "IN_CURS" si afisez mesajul de succes
+
+* `public void oprireAlegeri()` -> opreste sesiunea de alegeri
+  * setez stagiul ca "TERMINAT" si afisez mesajul de succes
+
+##### 2. Gestionarea circumscriptiilor
+* `public Circumscriptie cautaCircumscriptie(String numeCircumscriptie)` -> cauta circumscriptia in sesiunea de alegeri
+  * iterez si caut prin lista de circumscriptii cu ajutorul unui `for-each loop`, pana gasesc circumscriptia cu numele dat
+  * daca am gasit-o => o returnez
+  * daca nu am gasit-o => afisez eroarea si returnez `null`
+* `public void adaugaCircumscriptie(String numeCircumscriptie, String regiune)` -> adauga circumscriptia in sesiunea de alegeri
+  * verific daca exista deja circumscriptia in alegeri
+    * daca exista => afisez eroarea si ies din functie
+    * daca nu => creez circumscriptia, o adaug in alegeri si afisez mesajul de succes
+* `public void eliminaCircumscriptie(String numeCircumscriptie)` -> elimina circumscriptia din sesiunea de alegeri
+  * verific daca exista circumscriptia in alegeri
+    * daca nu => eroare si ies din functie
+    * daca da => sterg circumscriptia din alegeri si afisez mesajul de succes
+
+##### 3. Gestionarea candidatilor
+Pentru gestionarea candidatilor am ales sa folosesc o clasa ajutatoare, numita `ManagerCandidati`, 
+pentru a evita duplicarea codului (gestionez candidati si in circumscriptii si regiuni).
+Astfel, metodele din Alegeri cu aceasta functionalitate vor verifica conditiile
+de desfasurare a sesiunii si alegeri si vor apela metodele specializate din 
+clasa ManagerCandidati, prin intermediul campului managerCandidati.
+* `public Candidat cautaCandidat(String cnp)` -> cauta si returneaza candidatul
+* `public void adaugaCandidat(String cnp, int varsta, String nume)` -> adauga candidatul in alegeri
+* `public void eliminaCandidat(String cnp)` -> elimina candidatul din sesiunea de alegeri si anuleaza toate voturile primite de acesta in circumscriptii
+* `public void listareCandidati()` -> listeaza candidatii daca au inceput alegerile
+
+##### 4. Procesul de votare
+Se realizeaza prin intermediul metodei `votare`, aceasta fiind cea mai complexa metoda din program:
+* `public void votare(String numeCircumscriptie, String cnpVotant, String cnpCandidat)`
+  * verific daca exista circumscriptia in alegeri
+  * verific daca exista candidatul in alegeri
+  * verific daca votantul a incercat sa comita o fraduda, adica daca nu este inregistrat in circumscriptia in care a incercat sa voteze sau daca a votat deja
+    * a incercat sa comita o frauda => adaug frauda in lista, afisez eroarea corespunzatoare si opresc executia functiei
+    * a fost cinstit:
+      * marchez ca a votat si afisez mesajul de succes
+      * verific daca votul sau este unul valid (votantul nu este neindemanatic)
+        * daca da => adaug votul sau in circumscriptie si canditatului votat
+
+##### 5. Informatii suplimentare
+* `public boolean verificaPerioadaDeVotare()` -> verifica daca este perioada de votare (afiseaza eroare in caz contrar)
+* `public boolean verificaTerminareAlegeri()` -> verifica daca s-au terminat alegerile (afiseaza eroare in caz contrar)
+* `public boolean verificaIncepereAlegeri()` -> verifica daca au inceput alegerile (afiseaza eroare in caz contrar)
+* `public int numarVoturiNational()` -> returneaza numarul total de voturi exprimate
+  * calculez suma voturilor din toate circumscriptiile
+  * returnez rezultatul
+
+* `public ArrayList<Regiune> regiuni() `-> construieste si returneaza lista de regiuni din alegeri
+  * iterez prin circumscriptiile din lista
+  * pentru fiecare circumscriptie, adaug regiunea corespunzatoare in lista (daca nu exista deja)
+  * returnez lista de regiuni
 
 ### Persoana
 
+Clasa **Persoana** este o clasa abstracta de baza, avand atribute comune pentru toate persoanele implicate in procesul electoral.
+Aceasta este folosita ca parinte pentru clasele Candidat si Votant.
+
+Contine atribute si metode de baza: 
+
+#### <ins> Atribute:
+
+* `private String nume` -> numele persoanei
+* `private String cnp` -> CNP-ul, folsit pentru identificare
+* `private int varsta` -> varsta persoanei (folosita ulterior pentru validarea candidatilor si votantilor)
+
+#### <ins> Metode (functionalitati principale):
+
+* `public boolean cnpValid()` -> verifica daca persoana are CNP-ul valid (de lungime 13)
+  * daca da => returneaza `true`
+  * daca nu => afiseaza eroarea corespunsatoare si intoarce `false`
+* `public int compareTo(Persoana p)` -> suprascrie metoda pentru ordonarea descrescatoare dupa CNP
+* `public String toString()` -> suprascrie metoda pentru afisarea persoanelor conform cerintei
+
 ### Candidat
 
+Clasa **Candidat** extinde clasa abstracta **Persoana** si reprezinta un participant in alegeri. Aceasta contine atribute
+specifice unui candidat (`numarVoturi`), gestioneaza numarul de voturi primite si are metode de validare a candidatului.
+Comparatorul `ComparatorVoturiCnp` ma ajuta sa sortez candidatii descrescator dupa numarul de voturi, 
+apoi descrescator dupa CNP.
+
 ### Votant
-
-### Vot
-
-### Frauda
+Clasa **Votant** extinde clasa abstracta **Persoana** si reprezinta o persoana care isi exercita dreptul de vot intr-o circumscriptie. 
+Aceasta contine atribute specifice unui votant, cum ar fi circumscriptia in care voteaza, daca a votat sau nu si daca este neindemanatic. 
+De asemenea, clasa implementeaza functionalitati pentru validarea votantului.
 
 ### ManagerCandidati
 
-### ManagerVotanti
+Clasa **ManagerCandidati** este folosita pentru gestionarea candidatilor (intr-o sesiune de alegeri, intr-o circumscriptie sau intr-o regiune). 
+Aceasta implementeaza functionalitati pentru adaugarea, eliminarea, sortarea si listarea candidatilor. 
+De asemenea, permite identificarea candidatilor votati dintr-o lista de voturi si determinarea celui mai votat candidat dintr-o lista de candidati.
+
+### Vot
+
+Clasa **Vot** reprezinta un vot exprimat intr-o sesiune de alegeri. 
+Aceasta este caracterizat prin votant, candidatul ales si validitatea votului. 
+Validitatea este determinata de indemanarea votantului (atributul `neindemanatic`).
+
+### Frauda
+
+Clasa **Frauda** reprezinta o tentativa de frauda in procesul electoral. 
+Aceasta este caracterizata prin votantul care a comis frauda si suprascrie metoda `toString` 
+pentru a ma ajuta sa afisez raportul de fraude conform cerintei.
 
 ### Circumscriptie
 
+Clasa **Circumscriptie** reprezinta o subdiviziune teritoriala dintr-o sesiune de alegeri.
+Aceasta gestioneaza votantii, voturile si candidatii la nivel de circumscriptie.
+Include functionalitati pentru adaugarea votantilor si voturilor, precum si pentru identificarea candidatilor votati si a celui mai votat candidat.
+
 ### Regiune
+
+Clasa **Regiune** reprezinta un grup de circumscriptii dintr-o anumita zona geografica. 
+Aceasta contine metode pentru calcularea numarului total de voturi din regiune, identificarea 
+candidatilor votati si determinarea celui mai votat candidat din regiune.
+In aceasta clasa, suprascriu metoda `compareTo`, pentru a face afisarea descrescator, dupa nume.
+
+### Analiza
+
+Clasa **Analiza** este responsabila pentru afisarea analizelor detaliate ale rezultatelor alegerilor. 
+Aceasta include metode pentru analiza detaliata la nivel de circumscriptie si pe plan national, 
+calculand statistici precum procentaje celor mai votati candiati si distribuirea voturilor.
+
+#### <ins> Atribute:
+
+* Nu are atribute, intrucat e folosita doar pentru prelucrarea datelor din clasele Alegeri si Circumscriptie si afisarea analizelor rezultate
+
+#### <ins> Metode (functionalitati principale):
+* `public void analizaDetaliataPerCircumscriptie(Alegeri alegeri, Circumscriptie circumscriptie)` -> afiseaza analiza detaliata pentru circumscriptia data
+  * verific daca a votat macar un cetatean in acea circumscriptie
+    * daca nu => afisez eroarea si ies din functie
+  * aflu numarul de voturi pe plan national, numarul de voturi din circumscriptie, precum si cel mai votat candidat din circumscriptie
+  * calculez procentajele corespunzatoare: 
+    * procentajul voturilor din circumscriptie raportat la voturile nationale (`procentajCircmscriptie`)
+    * procentajul voturilor celui mai votat candidat raportat la totalul voturilor din circumscriptie (`procentajCandidat`)
+  * afisez analiza respectand formatul impus
+
+
+* `public void analizaDetaliataNational(Alegeri alegeri)` -> afiseaza analiza detaliata pe plan national (pentru toate regiunile din sesiunea de alegeri)
+  * procedez exact ca mai sus, doar ca pentru fiecare regiune din sesiunea de alegeri (folosesc un for-each loop pentru a trece prin toate reginunile ordonate descrescator dupa nume)
+
+### Raport
+
+Clasa **Raport** este responsabila de generarea rapoartelor cu rezultatele alegerilor. 
+Aceasta include metode ce afiseaza rapoarte pentru voturile dintr-o circumscriptie, pentru rezultatele 
+pe plan national si pentru tentativele de frauda inregistrate in timpul alegerilor.
+
+#### <ins> Atribute:
+
+* Nu are atribute, intrucat e folosita doar pentru prelucrarea datelor din clasele Alegeri si Circumscriptie si afisarea rapoartelor rezultate
+
+#### <ins> Metode (functionalitati principale):
+* `public void raportCircumscriptie(Circumscriptie circumscriptie)` -> afiseaza raportul de voturi pentru circumscriptia data
+  * verific daca a votat macar o persoana in circumscriptie
+  * determin lista candidatilor votati in circumscriptie
+  * sortez candidatii descrescator dupa voturi si descrescator dupa CNP
+  * afisez raportul
+
+* `public void raportNational(Alegeri alegeri)` -> afiseaza raportul de voturi pe plan national
+  * verific daca a votat macar o persoana in toata tara
+  * sortez lista cu candidatii din alegeri
+  * afisez raportul national
+
+* `public void raportFraude(Alegeri alegeri)` -> afiseaza raportul cu fraudele din alegeri
+  * verific daca exista tentative de frauda
+  * afisez lista cu fraudele, respectand ordinea last in first out (LIFO)
+
+
+## Bonus
+### Alte cazuri limita
+* CNP-ul nu este valid, pentru ca nu respecta forma standard `SAALLZZJJNNNC`. In programul meu, un CNP este 
+considerat valid daca este format doar din cifre si are lungimea 13, ceea ce in realitate nu este suficient
+pentru ca un CNP sa fie corect (in enuntul temei este specificat doar cazul "Lungime CNP invalida")
+* Varsta introdusa nu corespunde cu cea dedusa din CNP. Pentru a evita acest caz, varsta unei persoane ar putea fi extrasa direct din CNP 
+(asta in cazul in care se implementeaza o metoda de validare a CNP-ului mai complexa, precum cea descrisa mai sus)
+
+### Refactorizarea comenzilor

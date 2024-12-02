@@ -75,7 +75,7 @@ public class App {
                     System.out.println("Introduceti id-ul alegerilor:");
                     id = scanner.nextLine();
                     System.out.println("Ati introdus: " + id);
-                    managerAlegeri.pornesteAlegeri(id);
+                    managerAlegeri.pornireAlegeri(id);
                     break;
 
                 case 2:     // 2. Adaugare circumscriptie

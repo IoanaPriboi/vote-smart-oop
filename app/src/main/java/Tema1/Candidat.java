@@ -18,9 +18,18 @@ public class Candidat extends Persoana {
         return numarVoturi;
     }
 
+    public void setNumarVoturi(int numarVoturi) {
+        this.numarVoturi = numarVoturi;
+    }
+
     // Adauga un vot candidatului
     public void adaugaVot() {
-        this.numarVoturi++;
+        numarVoturi++;
+    }
+
+    // Anuleaza un vot al candidatului
+    public void anuleazaVot() {
+        numarVoturi--;
     }
 
     // Verifica daca canditatul are varsta valida

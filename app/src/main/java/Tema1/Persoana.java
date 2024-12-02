@@ -28,9 +28,9 @@ abstract public class Persoana implements Comparable<Persoana> {
         return varsta;
     }
 
-    // Verifica daca persoana are CNP-ul valid
+    // Verifica daca persoana are CNP-ul valid (este format din 13 cifre)
     public boolean cnpValid() {
-        if (cnp != null && cnp.length() == 13) {
+        if (cnp != null && cnp.length() == 13 && cnp.matches("\\d+")) {
             return true;
         }
 

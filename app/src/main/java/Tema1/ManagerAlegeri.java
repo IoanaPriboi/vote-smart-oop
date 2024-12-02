@@ -3,7 +3,6 @@ package Tema1;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 // Gestioneaza si salveaza toate alegerile din program
 public class ManagerAlegeri {
@@ -44,13 +43,19 @@ public class ManagerAlegeri {
     }
 
     // Porneste alegerile
-    public void pornesteAlegeri(String id) {
+    public void pornireAlegeri(String id) {
         // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca alegerile au inceput deja
+        if (!a.getStagiu().equals("NEINCEPUT")) {
+            System.out.println("EROARE: Alegerile deja au inceput");
+            return;
+        }
+
         // Pornesc alegerile
-        a.pornesteAlegeri();
+        a.pornireAlegeri();
     }
 
     // Adauga circumscriptia in alegeri
@@ -58,6 +63,9 @@ public class ManagerAlegeri {
         // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
+
+        // Verific daca este perioada de votare
+        if (!a.verificaPerioadaDeVotare()) return;
 
         // Adaug circumscriptia in alegeri
         a.adaugaCircumscriptie(nume, regiune);
@@ -69,6 +77,9 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca este perioada de votare
+        if (!a.verificaPerioadaDeVotare()) return;
+
         // Elimin circumscriptia
         a.eliminaCircumscriptie(nume);
     }
@@ -79,6 +90,9 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca este perioada de votare
+        if (!a.verificaPerioadaDeVotare()) return;
+
         // Adaug candidatul in alegeri
         a.adaugaCandidat(cnp, varsta, nume);
     }
@@ -88,6 +102,9 @@ public class ManagerAlegeri {
         // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
+
+        // Verific daca este perioada de votare
+        if (!a.verificaPerioadaDeVotare()) return;
 
         // Elimin candidatul din alegeri
         a.eliminaCandidat(cnp);
@@ -100,7 +117,7 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Verific daca este perioada de votare
-        if (!a.estePerioadaDeVotare()) return;
+        if (!a.verificaPerioadaDeVotare()) return;
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
@@ -116,6 +133,9 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca au inceput alegerile
+        if(!a.verificaIncepereAlegeri()) return;
+
         // Listez candidatii din alegeri
         a.listareCandidati();
     }
@@ -127,9 +147,7 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Verific daca au inceput alegerile
-        if (!(a.getStagiu().equals("IN_CURS") || a.getStagiu().equals("TERMINAT"))) {
-            return;
-        }
+        if(!a.verificaIncepereAlegeri()) return;
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
@@ -145,6 +163,9 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca este perioada de votare
+        if (!a.verificaPerioadaDeVotare()) return;
+
         // Se realizeaza votarea
         a.votare(numeCircumscriptie, cnpVotant, cnpCandidat);
     }
@@ -155,6 +176,10 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca este perioada de votare
+        if (!a.verificaPerioadaDeVotare()) return;
+
+        // Opresc alegerile
         a.oprireAlegeri();
     }
 
@@ -164,12 +189,8 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
-
         // Verific daca s-au terminat alegerile
-        if (!a.getStagiu().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
+        if (!a.verificaTerminareAlegeri()) return;
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
@@ -185,6 +206,9 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca s-au terminat alegerile
+        if (!a.verificaTerminareAlegeri()) return;
+
         // Afisez raportul de voturi pe plan national
         raport.raportNational(a);
     }
@@ -194,6 +218,9 @@ public class ManagerAlegeri {
         // Verific daca exista alegerile cu id-ul dat
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
+
+        // Verific daca s-au terminat alegerile
+        if (!a.verificaTerminareAlegeri()) return;
 
         // Verific daca exista circumscriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
@@ -208,6 +235,9 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca s-au terminat alegerile
+        if (!a.verificaTerminareAlegeri()) return;
+
         // Afisez analiza detaliata pe plan national
         analiza.analizaDetaliataNational(a);
     }
@@ -218,8 +248,22 @@ public class ManagerAlegeri {
         Alegeri a = cautaAlegeri(id);
         if (a == null) return;
 
+        // Verific daca s-au terminat alegerile
+        if (!a.verificaTerminareAlegeri()) return;
+
         // Afisez fraudele comise
         raport.raportFraude(a);
+    }
+
+    // Sterge alegerile cu id-ul dat din lista de alegeri
+    public void stergeAlegeri(String id) {
+        // Verific daca exista alegerile cu id-ul dat
+        Alegeri a = cautaAlegeri(id);
+        if (a == null) return;
+
+        // Elimin alegerile din lista si afisez mesajul pentru succes
+        listaAlegeri.remove(a);
+        System.out.println("S-au sters alegerile " + a.getNume());
     }
 
     // Listeaza toate alegerile
@@ -235,16 +279,5 @@ public class ManagerAlegeri {
         for (Alegeri a : listaAlegeri) {
             System.out.println(a);
         }
-    }
-
-    // Sterge alegerile cu id-ul dat din lista de alegeri
-    public void stergeAlegeri(String id) {
-        // Verific daca exista alegerile cu id-ul dat
-        Alegeri a = cautaAlegeri(id);
-        if (a == null) return;
-
-        // Elimin alegerile din lista si afisez mesajul pentru succes
-        listaAlegeri.remove(a);
-        System.out.println("S-au sters alegerile " + a.getNume());
     }
 }

@@ -55,26 +55,8 @@ public class Alegeri {
         return fraude;
     }
 
-    // Verifica daca este perioada de votare
-    public boolean estePerioadaDeVotare() {
-        if (stagiu.equals("IN_CURS")) {
-            return true;
-        }
-
-        // Nu este perioada de votare => eroare
-        System.out.println("EROARE: Nu este perioada de votare");
-        return false;
-    }
-
-    // Porneste alegerile daca ele nu au inceput deja
-    public void pornesteAlegeri() {
-        // Verific daca alegerile nu au inceput
-        if (!stagiu.equals("NEINCEPUT")) {
-            System.out.println("EROARE: Alegerile deja au inceput");
-            return;
-        }
-
-        // Pornesc alegerile
+    // Porneste sesiunea de alegeri
+    public void pornireAlegeri() {
         setStagiu("IN_CURS");
         System.out.println("Au pornit alegerile " + nume);
     }
@@ -95,9 +77,6 @@ public class Alegeri {
 
     // Adauga circumscriptia c la sesiunea de alegeri
     public void adaugaCircumscriptie(String numeCircumscriptie, String regiune) {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
-
         // Caut si verific daca exista deja o circumscriptie cu acelasi nume
         for (Circumscriptie c : circumscriptii) {
             if (c.getNume().equals(numeCircumscriptie)) {
@@ -113,15 +92,17 @@ public class Alegeri {
 
     // Elimina circumscriptia cu numele dat din sesiunea de alegeri
     public void eliminaCircumscriptie(String numeCircumscriptie) {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
-
         // Verific daca exista circumsriptia in alegeri
-        Circumscriptie c = cautaCircumscriptie(numeCircumscriptie);
-        if (c == null) return;
+        Circumscriptie circumscriptie = cautaCircumscriptie(numeCircumscriptie);
+        if (circumscriptie == null) return;
+
+        // Sterg voturile pentru candidatii votati in circumscriptie
+        for(Candidat candidat: candidati) {
+            circumscriptie.anuleazaVoturiCandidat(candidat.getCnp());
+        }
 
         // Sterg circumscriptia din sesiunea de alegeri
-        circumscriptii.remove(c);
+        circumscriptii.remove(circumscriptie);
         System.out.println("S-a sters circumscriptia " + numeCircumscriptie);
     }
 
@@ -132,39 +113,27 @@ public class Alegeri {
 
     // Adauga un candidat in alegeri
     public void adaugaCandidat(String cnp, int varsta, String nume) {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
-
-        // Adaug candidatul in alegeri
         managerCandidati.adaugaCandidat(cnp, varsta, nume);
     }
 
     // Elimina un candidat din alegeri
     public void eliminaCandidat(String cnp) {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
+        // Anulez voturile candidatului primite in toate circumscriptiile
+        for (Circumscriptie c : circumscriptii) {
+            c.anuleazaVoturiCandidat(cnp);
+        }
 
-        // Elimin candidatul din alegeri
+        // Elimin candidatul din sesiunea de alegeri
         managerCandidati.eliminaCandidat(cnp);
     }
 
     // Listeaza candidatii din sesiunea de alegeri ordonati descrescator dupa CNP
     public void listareCandidati() {
-        // Verific daca au inceput alegerile
-        if (!(stagiu.equals("IN_CURS") || stagiu.equals("TERMINAT"))) {
-            System.out.println("EROARE: Inca nu au inceput alegerile");
-            return;
-        }
-
-        // Listez candidatii
         managerCandidati.listareCandidati();
     }
 
-    // Metoda prin care se voteaza in circumscriptie
+    // Metoda prin care se voteaza
     public void votare(String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
-
         // Verific daca exista circumscriptia
         Circumscriptie circumscriptie = cautaCircumscriptie(numeCircumscriptie);
         if(circumscriptie == null) return;
@@ -183,11 +152,11 @@ public class Alegeri {
             return;
         }
 
-        // Votantul a fost cinctit, deci inregistrez votul
-        Vot vot = new Vot(votant, candidat);
+        // Votantul a fost cinctit, deci marchez ca a votat
         votant.setVotat(true);
 
-        // Verific daca votul este valid si il adaug in circumcriptie si candidatului
+        // Verific daca votul este valid si il inregistrez
+        Vot vot = new Vot(votant, candidat);
         if(vot.getValid()) {
             circumscriptie.adaugaVot(vot);
             candidat.adaugaVot();
@@ -199,11 +168,10 @@ public class Alegeri {
 
     // Opreste alegerile
     public void oprireAlegeri() {
-        // Verific daca este perioada de votare
-        if (!estePerioadaDeVotare()) return;
-
         // Marchez alegerile ca terminate
         setStagiu("TERMINAT");
+
+        // Afisez mesajul de succes
         System.out.println("S-au terminat alegerile " + nume);
     }
 
@@ -234,6 +202,40 @@ public class Alegeri {
 
         // Returnez lista rezultata
         return regiuni;
+    }
+
+    // Verifica daca este perioada de votare
+    public boolean verificaPerioadaDeVotare() {
+        if (stagiu.equals("IN_CURS")) {
+            return true;
+        }
+
+        // Nu este perioada de votare => eroare
+        System.out.println("EROARE: Nu este perioada de votare");
+        return false;
+    }
+
+    // Verifica daca s-au terminat alegerile
+    public boolean verificaTerminareAlegeri() {
+        if (stagiu.equals("TERMINAT")) {
+            System.out.println("EROARE: Inca nu s-a terminat votarea");
+            return true;
+        }
+
+        // Nu s-au terminat alegerile => eroare
+        System.out.println("EROARE: Inca nu s-a terminat votarea");
+        return false;
+    }
+
+    // Verifica daca au inceput alegerile
+    public boolean verificaIncepereAlegeri() {
+        if (stagiu.equals("IN_CURS") || stagiu.equals("TERMINAT")) {
+            return true;
+        }
+
+        // Nu au inceput => erorare
+        System.out.println("EROARE: Inca nu au inceput alegerile");
+        return false;
     }
 
     // Returneaza numarul de voturi pe plan national (din toate circumscriptiile)

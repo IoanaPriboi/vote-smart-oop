@@ -1,5 +1,7 @@
 package Tema1;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.*;
 
 public class Circumscriptie {
@@ -99,6 +101,17 @@ public class Circumscriptie {
         return null;    // nu am gasit votantul
     }
 
+    // Sterge voturile pentru candidatul dat ca parametru
+    public void anuleazaVoturiCandidat(String cnpCandidat) {
+        // Parcurg toate voturile si le sterg pe cele care sunt in favoarea candidatului dat ca parametru
+        for (Vot v : voturi) {
+            if(v.getCandidat().getCnp().equals(cnpCandidat)) {
+                v.getCandidat().anuleazaVot();
+                voturi.remove(v);
+            }
+        }
+    }
+
     // Returneaza o lista cu canidatii votati in aceasta circumscriptie
     public ArrayList<Candidat> candidatiVotati() {
         return new ManagerCandidati().candidatiVotati(voturi);
@@ -107,5 +120,16 @@ public class Circumscriptie {
     // Returneaza cel mai votat candidat din circumscriptie
     public Candidat celMaiVotatCandidat() {
         return new ManagerCandidati(candidatiVotati()).celMaiVotatCandidat();
+    }
+
+    // Returneaza numarul de voturi din circumscriptie pentru candidatul dat
+    public int numarVoturiCandidat(String cnpCandidat) {
+        int numarVoturi = 0;
+        for (Vot v : voturi) {
+            if(v.getCandidat().getCnp().equals(cnpCandidat)) {
+                numarVoturi++;
+            }
+        }
+        return numarVoturi;
     }
 }

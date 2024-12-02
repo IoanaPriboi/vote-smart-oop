@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ManagerCandidati {
-    private ArrayList<Candidat> candidati = new ArrayList<>();
+    private ArrayList<Candidat> candidati;
 
     // Constructori
     public ManagerCandidati() {

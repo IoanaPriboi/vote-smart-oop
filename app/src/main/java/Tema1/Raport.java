@@ -6,7 +6,7 @@ public class Raport {
 
     // Afiseaza raportul de voturi pentru circumscriptie
     public void raportCircumscriptie(Circumscriptie circumscriptie) {
-        // Verific daca nu a votat nimeni in circumscriptie
+        // Verific daca a votat cineva in circumscriptie
         if (circumscriptie.getNumarVoturi() == 0) {
             System.out.println("GOL: Lumea nu isi exercita dreptul de vot in " + circumscriptie.getNume());
             return;
@@ -27,12 +27,6 @@ public class Raport {
 
     // Afiseaza raportul national de voturi pentru alegerile date ca parametru
     public void raportNational(Alegeri alegeri) {
-        // Verific daca s-a terminat sesiunea de alegeri
-        if (!alegeri.getStagiu().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
-
         // Verific daca lumea isi exercita dreptul de vot
         if (alegeri.numarVoturiNational() == 0) {
             System.out.println("GOL: Lumea nu isi exercita dreptul de vot in Romania");
@@ -51,12 +45,6 @@ public class Raport {
 
     // Afiseaza toate fraudele din sesiunea de alegeri
     public void raportFraude(Alegeri alegeri) {
-        // Verific daca s-a terminat sesiunea de alegeri
-        if (!alegeri.getStagiu().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
-
         // Verific daca nu s-a comis nicio frauda
         ArrayList<Frauda> fraude = alegeri.getFraude();
         if (fraude.isEmpty()) {

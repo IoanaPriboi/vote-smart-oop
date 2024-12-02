@@ -7,13 +7,7 @@ public class Analiza {
 
     // Afiseaza analiza detaliata per circumscriptie
     public void analizaDetaliataPerCircumscriptie(Alegeri alegeri, Circumscriptie circumscriptie) {
-        // Verific daca s-au terminat alegerile
-        if (!alegeri.getStagiu().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
-
-        // Verific daca nu a votat niciun cetatean din circumscriptie
+        // Verific daca cetatenii au votat
         int numarVoturiNational = alegeri.numarVoturiNational();
         int numarVoturiCircumscriptie = circumscriptie.getNumarVoturi();
         if (numarVoturiCircumscriptie == 0) {
@@ -34,12 +28,6 @@ public class Analiza {
 
     // Afiseaza analiza detaliata pe plan national
     public void analizaDetaliataNational(Alegeri alegeri) {
-        // Verific daca s-a terminat perioada de votare
-        if (!alegeri.getStagiu().equals("TERMINAT")) {
-            System.out.println("EROARE: Inca nu s-a terminat votarea");
-            return;
-        }
-
         // Verific daca nu a votat nimeni
         int numarVoturiNational = alegeri.numarVoturiNational();
         if (numarVoturiNational == 0) {
