@@ -4,15 +4,10 @@
 
 ## Idee generală
 **Vote smart**  este o platforma simpla de votare online, care gestioneaza procesul electoral
-intr-un mod organizat si interactiv.
-
-In cadrul aplicatiei, prin intermediul unui meniu sugestiv de comenzi,
-utilizatorul poate crea alegeri, adauga circumscriptii, votanti si candidati, 
-poate inregistra voturi. Dupa incheierea alegerilor, se pot genera rapoarte pentru voturi 
-si analize detaliate, atat per circumscriptie, cat si pe plan national. 
-De asemenea, platforma contine si functii pentru validarea datelor si gestionarea tentativelor de frauda,
-pentru a asigura corectitudinea procesului electoral.
-
+intr-un mod organizat si interactiv. In cadrul aplicatiei, prin intermediul unui meniu sugestiv de comenzi,
+utilizatorul poate crea si sterge alegeri, adauga circumscriptii, votanti, candidati si voturi. 
+Dupa incheierea alegerilor, se pot genera rapoarte pentru voturile inregistrate si analize detaliate, atat per circumscriptie, cat si pe plan national.
+De asemenea, aplicatia asigura corectitudinea procesului electoral prin validarea datelor, tratarea cazurilor limita si gestionarea tentativelor de frauda.
 ## Funtionalitati
 
 ### 1. Interactiune user-friendly
