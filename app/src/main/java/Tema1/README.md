@@ -131,7 +131,7 @@ Aici sunt centralizate toate informatiile si actiunile legate de o sesiune de al
 * `public void eliminaCircumscriptie(String numeCircumscriptie)` -> elimina circumscriptia din sesiunea de alegeri
   * verific daca exista circumscriptia in alegeri
     * daca nu => eroare si ies din functie
-    * daca da => sterg circumscriptia din alegeri si afisez mesajul de succes
+    * daca da => anulez toate voturile din acea circumscriptie, sterg circumscriptia din alegeri si afisez mesajul de succes
 
 ##### 3. Gestionarea candidatilor
 Pentru gestionarea candidatilor am ales sa folosesc o clasa ajutatoare, numita `ManagerCandidati`, 
@@ -217,8 +217,8 @@ Validitatea este determinata de indemanarea votantului (atributul `neindemanatic
 ### Frauda
 
 Clasa **Frauda** reprezinta o tentativa de frauda in procesul electoral. 
-Aceasta este caracterizata prin votantul care a comis frauda si suprascrie metoda `toString` 
-pentru a ma ajuta sa afisez raportul de fraude conform cerintei.
+Aceasta este caracterizata prin votantul care a comis frauda si circumscriptia in care a fost comisa frauda. 
+Am suprascris metoda `toString` pentru a ma ajuta sa afisez raportul de fraude conform cerintei.
 
 ### Circumscriptie
 
@@ -285,11 +285,73 @@ pe plan national si pentru tentativele de frauda inregistrate in timpul alegeril
 
 
 ## Bonus
+
 ### Alte cazuri limita
+
 * CNP-ul nu este valid, pentru ca nu respecta forma standard `SAALLZZJJNNNC`. In programul meu, un CNP este 
 considerat valid daca este format doar din cifre si are lungimea 13, ceea ce in realitate nu este suficient
-pentru ca un CNP sa fie corect (in enuntul temei este specificat doar cazul "Lungime CNP invalida")
+pentru ca un CNP sa fie corect (in enuntul temei este specificat doar cazul "Lungime CNP invalida").
 * Varsta introdusa nu corespunde cu cea dedusa din CNP. Pentru a evita acest caz, varsta unei persoane ar putea fi extrasa direct din CNP 
-(asta in cazul in care se implementeaza o metoda de validare a CNP-ului mai complexa, precum cea descrisa mai sus)
+(asta in cazul in care se implementeaza o metoda de validare a CNP-ului mai complexa, precum cea descrisa mai sus).
+* Numele persoanelor (chiar si cel al alegerilor, circumsriptiilor, regiunilor etc.) ar trebui sa respecte un anumit format care sa fie testat si validat 
+(de exemplu, nu pot contine caractere speciale)
+* Daca s-a comis o frauda intr-o circumscriptie care a fost stearsa ulterior, frauda ramane in lista cu toate fraudele din cadrul sesiunii de alegeri si va aparea in raportul final. 
+In opinia mea, fraudele comise intr-o circumsriptie eliminata din alegeri ar trebui sterse, asa cum sunt sterse voturile si votantii din cadrul acelei circumscriptii.
+Daca nu se sterg aceste fraude, atunci, la crearea raportului cu fraude, ar trebui afisata o eroare de genul: "EROARE: Circumscriptia nu mai exista".
+* Romanii din diaspora nu prea pot sa voteze prin intermediul acestei aplicatii, poate ar fi fost utila introducerea unei astfel de optiuni, 
+pentru ca procesul elecotral sa fie cat mai apropiat de realitate.
 
-### Refactorizarea comenzilor
+
+### Refactorizarea comenzilor si raspunsurilor
+
+* Citirea input-ului cred ca putea fi mai clara. Poate ar fi fost utila o clasa separata care sa contina metode separate pentru citirea inputului si afisarea mesajelor pentru fiecare comanda. De exemplu:
+  * Clasa `CitireInput` cu metode ce contin practic blocurile din structura `switch`, din metoda `run`. De exemplu, pentru comanda 0. Creare alegeri:
+      * in clasa `CitireInput`:
+         ```
+        public String[] comanda0() {
+              System.out.println("Introduceti id-ul si numele alegerilor:");
+              String id = scanner.next();
+              String numeAlegeri = scanner.nextLine().trim();
+              System.out.println("Ati introdus: " + id + " " + numeAlegeri);
+              return new String[] {id, numeAlegeri};
+        } 
+        ```
+        * in metoda `run()` din clasa `App`:
+          ```
+          switch (comanda) {
+             case 0: // Creare alegeri
+               String[] input = citireInput.comanda0();
+               managerAlegeri.creeazaAlegeri(input[0], input[1]);
+               break;
+          ```
+          
+* Introducerea unor blocuri try-catch pentru anumite exceptii si erori poate ar fi fost benefica. De exemplu, in structura `switch`:
+  * ````
+        try {
+          switch (comanda) {
+             case 0: // Creare alegeri
+               String[] input = citireInput.comanda0();
+               managerAlegeri.creeazaAlegeri(input[0], input[1]);
+               break;
+        } catch (Exception e){
+              // un mesaj
+        }
+    ````
+    
+* Implementarea unei interfete cu metode de citire input, afisare mesaje si rulare comenzi ar putea face logica programului mai clara.
+Interfata ar putea avea un schelet de genul:
+  * ````
+    public interface AplicatieInterface {
+    // Citeste input-ului
+    String citesteInput(String input);
+
+    // Afiseaza un mesaj in consola
+    void afiseazaMesaj(String mesaj);
+
+    // Ruleaza o comanda
+    void ruleazaComanda(int id);
+    } 
+    ````
+          
+
+  

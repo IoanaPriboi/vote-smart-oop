@@ -97,7 +97,7 @@ public class Alegeri {
         if (circumscriptie == null) return;
 
         // Sterg voturile pentru candidatii votati in circumscriptie
-        for(Candidat candidat: candidati) {
+        for (Candidat candidat : candidati) {
             circumscriptie.anuleazaVoturiCandidat(candidat.getCnp());
         }
 
@@ -136,7 +136,7 @@ public class Alegeri {
     public void votare(String numeCircumscriptie, String cnpVotant, String cnpCandidat) {
         // Verific daca exista circumscriptia
         Circumscriptie circumscriptie = cautaCircumscriptie(numeCircumscriptie);
-        if(circumscriptie == null) return;
+        if (circumscriptie == null) return;
 
         // Verific daca exista candidatul
         Candidat candidat = cautaCandidat(cnpCandidat);
@@ -146,7 +146,7 @@ public class Alegeri {
         Votant votant = circumscriptie.cautaVotant(cnpVotant);
         if (votant == null || votant.getVotat()) {
             // Adaug frauda in lista de fraude din alegeri si afisez eroarea
-            fraude.add(new Frauda(votant));
+            fraude.add(new Frauda(votant, circumscriptie));
             System.out.println("FRAUDA: Votantul cu CNP-ul " + cnpVotant +
                     " a incercat sa comita o frauda. Votul a fost anulat");
             return;
@@ -157,7 +157,7 @@ public class Alegeri {
 
         // Verific daca votul este valid si il inregistrez
         Vot vot = new Vot(votant, candidat);
-        if(vot.getValid()) {
+        if (vot.getValid()) {
             circumscriptie.adaugaVot(vot);
             candidat.adaugaVot();
         }
