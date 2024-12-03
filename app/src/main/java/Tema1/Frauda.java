@@ -38,7 +38,7 @@ public class Frauda {
     @Override
     public String toString() {
         // Verific daca am sters circumscriptia sau votantul intre timp
-        if(circumscriptie == null || votant == null) {
+        if (circumscriptie == null || votant == null) {
             return null;
         }
         return "In " + circumscriptie.getNume() +

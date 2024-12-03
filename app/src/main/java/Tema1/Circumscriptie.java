@@ -105,7 +105,7 @@ public class Circumscriptie {
     public void anuleazaVoturiCandidat(String cnpCandidat) {
         // Parcurg toate voturile si le sterg pe cele care sunt in favoarea candidatului dat ca parametru
         for (Vot v : voturi) {
-            if(v.getCandidat().getCnp().equals(cnpCandidat)) {
+            if (v.getCandidat().getCnp().equals(cnpCandidat)) {
                 v.getCandidat().anuleazaVot();
                 voturi.remove(v);
             }
@@ -126,7 +126,7 @@ public class Circumscriptie {
     public int numarVoturiCandidat(String cnpCandidat) {
         int numarVoturi = 0;
         for (Vot v : voturi) {
-            if(v.getCandidat().getCnp().equals(cnpCandidat)) {
+            if (v.getCandidat().getCnp().equals(cnpCandidat)) {
                 numarVoturi++;
             }
         }

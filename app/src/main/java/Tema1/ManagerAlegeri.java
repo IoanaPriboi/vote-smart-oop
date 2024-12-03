@@ -134,7 +134,7 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Verific daca au inceput alegerile
-        if(!a.verificaIncepereAlegeri()) return;
+        if (!a.verificaIncepereAlegeri()) return;
 
         // Listez candidatii din alegeri
         a.listareCandidati();
@@ -147,7 +147,7 @@ public class ManagerAlegeri {
         if (a == null) return;
 
         // Verific daca au inceput alegerile
-        if(!a.verificaIncepereAlegeri()) return;
+        if (!a.verificaIncepereAlegeri()) return;
 
         // Verific daca exista circumsriptia in alegeri
         Circumscriptie c = a.cautaCircumscriptie(numeCircumscriptie);
