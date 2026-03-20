@@ -345,6 +345,10 @@ Interfata ar putea avea un schelet de genul:
     void ruleazaComanda(int id);
     } 
     ````
-          
 
+
+## Run
+
+```bash
+gradle test
   
